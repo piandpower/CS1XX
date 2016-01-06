@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>CS 116 Tutorial 2 (Solutions): Functional abstraction</title>
+
+        
+<link rel="stylesheet" type="text/css" href="/~cs116/style.css" />
+<link rel="stylesheet" type="text/css" href="/~cs116/print.css" media="print" />
+
+<!-- If this is IE, run javascript code to fix its behaviour -->
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js"
+        type="text/javascript"></script>
+<![endif]-->
+
+<!-- Function to insert email address invisible to crawlers -->
+<script type="text/javascript">
+   /* <![CDATA[ */
+function insertMailto( $emailuser, $emailhost ) {
+   document.write('<a href=\"mailto:' + $emailuser + ' at ' + $emailhost 
+                  + '\">' + $emailuser + ' at ' + $emailhost + '</a>');
+   /* ]]> */
+}
+</script>
+
+
+</head>
+<body>
+<h1>CS 116: Introduction to Computer Science 2</h1>
+
+<!-- This probably shouldn't be done as a table -->
+<table id="main">
+   <tr>
+      <td id="nav-box">
+         	  <ul id="nav-bar">
+        <li><a href="/~cs116">Announcements&nbsp;/&nbsp;Home</a></li>
+        <li><a href="/~cs116/personnel">Personnel</a>
+        	<ul>
+        		<li><a href="/~cs116/officehours">Office Hours</a></li>
+        		<li><a href="/~cs116/needhelp">Need Help?</a></li>
+        	</ul>
+        </li>
+        <li> <a href="/~cs116/assignments">Assignments</a> 
+        	<ul>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/publictest.php">Public Test System</a></li>
+        		<li><a href="/~cs116/postmortem">Postmortems</a></li>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/protect">Assignment Solutions</a></li>
+        	</ul>
+        </li>
+        
+        <li><a href="/~cs116/Instructor-Specific-page">Instructor Specific Pages</a></li>
+        <li><a href="/~cs116/timetable">Timetable</a></li>
+        <li><a href="/~cs116/exams">Exams</a></li>
+        <li><a href="/~cs116/grading">Grading</a></li>
+        <li><a href="/~cs116/resources">Resources&nbsp;&amp;&nbsp;Links</a></li>
+        <li><a href="/~cs116/handouts">Handouts</a>
+        	<ul> 
+        	<li> <a href="/~cs116/errata">Errata </a> </li>
+        	</ul>
+        </li>
+        <li><a href="/~cs116/styleGuide">Programming&nbsp;Style</a></li>
+        <li><a href="/~cs116/tutorials">Tutorials</a></li>
+		<!-- <li><a href="/~cs116/W09">Winter 2009</a></li> -->
+      </ul>
+
+      </td>
+      <td id="main-box">
+
+
+<h2 class="title">CS 116 Tutorial 2 (solutions): Functional abstraction (Sept 22 &amp; 24, 2010)</h2>
+<br />
+<ol>
+<li><p>Write a function <code>map-together</code> that consumes a function <code>f</code> and two
+lists <code>lst1</code> and <code>lst2</code> of the same length, and returns the list:</p>
+<p><code>(list (f (first lst1) (first lst2)) (f (second lst1) (second lst2)) ...)</code></p>
+<p>that we get if we apply f to the first elements of both lists, then the second elements of
+both lists, and so on. What is the contract of <code>map-together</code>?</p>
+
+<blockquote><pre>;; map-together:  (X Y -> Z) (listof X) (listof Y) -> (listof Z)
+;; applies f to each pair of matched positions in the supplied lists,
+;; and produces a new list with the outcomes.
+;; examples:
+;; (map-together * empty empty) => empty
+;; (map-together list '(1 2 3) '(a b c)) => '((1 a) (2 b) (3 c))
+;; (map-together + '(1 2 3) '(4 5 6)) => '(5 7 9)
+
+(define (map-together f lst1 lst2)
+  (cond [(empty? lst1) empty]
+  	    [else (cons (f (first lst1) (first lst2)) 
+	            (map-together f (rest lst1) (rest lst2)))]))
+	            
+(check-expect (map-together * empty empty) empty)
+(check-expect (map-together list '(1 2 3) '(a b c)) '((1 a) (2 b) (3 c)))
+(check-expect (map-together + '(1 2 3) '(4 5 6)) '(5 7 9))</pre></blockquote>
+
+<p>It turns out that map can actually handle this scenario itself; map can consume
+any number of lists, provided they are the same length and that the function provided
+to map consumes that number of elements. For example, <code>(map equal? lst1 lst2)</code>
+will work fine, but <code>(map equal? lst1)</code> will not, since <code>equal?</code>
+consumes 2 or more arguments. This question is still important to understant as an
+example of abstract list functions, but you may use <code>map</code> in these situations
+on subsequent assignments.</p><br /></li>
+
+<li><p>A <code>product</code> is a structure <code>(make-product n p)</code> where <code>n</code>
+is a symbol representing the name of the product and <code>p</code> is a number representing
+the price of the product. Its structure definition is <code>(define-struct product (name price))</code></p>
+
+<p>Using <code>local</code>, write a function <code>price-order</code> that consumes a list of
+products and a list of non-negative integers of the same length. The list of integers is the
+number of products of the corresponding position in the list of
+products that someone wants to order.  The function <code>price-order</code>
+computes the cost of the order. You may use <code>map-together</code> as
+a helper function. </p>
+
+<blockquote><pre>
+(define-struct product (name price))
+(define products (list (make-product 'tomatoes 1) (make-product 'oranges 2)))
+
+;; price-order: (listof product) (listof int) -> num
+;; computes the price of an order, where we are buying (first orderblank) of the product
+;; (first productsheet), (second orderblank) of (second productsheet) and so on.
+;; examples: 
+;; (price-order products '(1 2)) => 5
+;; (price-order empty empty) => 0
+
+(define (price-order productsheet orderblank)
+  ;; price-one-product: product int -> num
+  ;; Consumes a product, prod, and a non-negative integer, order, and multiplies
+  ;; the price of prod by order.
+  (local [(define (price-one-product prod order) (* (product-price prod) order))]
+    (foldr + 0 (map-together price-one-product productsheet orderblank))))
+
+(check-expect (price-order empty empty) 0)
+(check-expect (price-order (list (make-produce 'carrots 1)) '(10)) 10)
+(check-expect (price-order (list (make-produce 'carrots 1)) '(0)) 0)
+(check-expect (price-order products '(1 2)) 5)</pre></blockquote><br /></li>
+
+<li>Use <code>lambda</code> to simplify the definition for price-order to avoid single-use
+functions.
+
+<blockquote><pre>(define (price-order productsheet orderblank)
+  (foldr + 0 (map-together (lambda (prod order) 
+                              (* (product-price prod) order))
+                           productsheet orderblank)))</pre></blockquote><br /></li>
+					    
+					      
+<li><code>ormap</code> is another built-in abstract function in Scheme. It
+consumes a function <code>f</code> and a list <code>lst</code>, and produces <code>true</code>
+if applying <code>f</code> to any value in lst produces <code>true</code>. Otherwise,
+<code>false</code> is produced. For example, to determine if there are any even numbers in
+<code>(list 3 7 6 1 0 9 7 -1)</code>, you can write
+<code>(ormap even? (list 3 7 6 1 0 9 7 -1))</code>. 
+What is the contract for <code>ormap</code>?
+
+<blockquote><pre>ormap: (X -> boolean) (listof X) -> boolean</pre></blockquote><br /></li>
+
+<li>Use <code>ormap</code> to complete the function <code>any-blow-out?</code> that 
+consumes a list of game structures and a positive integer <code>range</code>,
+and produces <code>true</code> if any game has a score differential of at 
+least range.
+
+<blockquote><pre>
+(define-struct game (home-team visiting-team home-score visiting-score))
+;; A game is a (make-game  h v hs vs), where
+;; h is a string (name of home team),
+;; v is a string (name of visiting team),
+;; hs is a natural number (score of home team)
+;; vs is a natural number (score of visiting team).
+;; Note that no games end in a tie - there is always a winning team.
+
+;; any_blow_out?: (listof game) int[>0] -> boolean
+;; produces true if any game in games was a blow-out (i.e. one team
+;; won by at least range points), and false otherwise.
+;; Examples: 
+;;(any-blow-out?
+;; (list (make-game "Canada" "Slovakia" 18 0)
+;;       (make-game "Switzerland" "Sweden" 1 3)) 10) => true 
+;; (any-blow-out?
+;;  (list (make-game "Canada" "Slovakia" 18 0)
+;;        (make-game "Switzerland" "Sweden" 1 3)) 20) => false
+
+(define (any-blow-out? games range)
+  (ormap (lambda (g)
+           (>= (abs (- (game-home-score g) (game-visiting-score g)))
+               range))
+         games))
+
+(check-expect (any-blow-out? empty 2) false)
+(check-expect
+  (any-blow-out? (list (make-game "Canada" "Slovakia" 18 0)) 10)
+  true)
+(check-expect
+  (any-blow-out? (list (make-game "Canada" "Slovakia" 8 0)) 10)
+  false)
+(check-expect 
+  (any-blow-out? (list (make-game "Canada" "Slovakia" 18 0)
+                       (make-game "Switzerland" "Sweden" 1 3))
+                 10)
+  true)
+(check-expect 
+  (any-blow-out? (list (make-game "Canada" "Slovakia" 18 0)
+                       (make-game "Switzerland" "Sweden" 1 3))
+                 20)
+  false)</pre></blockquote>
+       
+</li></ol>
+</td>
+</tr>
+</table>
+
+<div class="validator">
+<!-- If this is IE, display this link -->
+<!--[if lt IE 8]>
+<a href="http://code.google.com/p/ie7-js/">
+   <img style="border:0;width:88px"
+   src="http://ie7-js.googlecode.com/svn/version/ie7.gif"
+   alt="IE7 library used" />
+</a>
+<![endif]-->
+<a href="http://validator.w3.org/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://www.w3.org/Icons/valid-xhtml10-blue"
+   alt="Valid XHTML 1.0 Strict" />
+</a>
+<a href="http://jigsaw.w3.org/css-validator/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+   alt="Valid CSS!" />
+</a>
+</div>
+
+<p class="lastModified">
+Last modified on 
+  
+  Wednesday, 29 September 2010, at 09:48 hours.
+</p>
+
+
+</body>
+</html>
+					      

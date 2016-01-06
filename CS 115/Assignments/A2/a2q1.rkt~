@@ -1,0 +1,44 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname untitled) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+;;********************************************
+;; CS 115 Assignment 2, Question 1
+;; Christopher Alert
+;;(Creating a file with a header)
+;;
+;;********************************************
+
+
+;;Online gaming membership
+
+;;  three levels
+;; ;;may play additional but extra charge
+
+;; Question 1
+
+;; monthly-fees: symbol nat-> num[> 0]
+;; Produces the 
+(define (monthly-fees type games-played)
+  (cond [(= type 'Basic) (basic-chrge games-played)]
+        [(= type 'Enhanced) (enhan-chrge games-played)]
+        [(= type 'Premium) (prem-chrge games-played)]
+        ))
+         
+         
+         
+ (define (basic-chrge games-played)
+   (+ 10
+      (cond [(<= games-played 50) 0]
+            [(> 50) (* (- games-played 50) 0.5)])))
+ 
+ (define (enhan-chrge games-played)
+   (+ 15
+      (cond [(<= games-played 75) 0]
+            [(> 50) (* (- games-played 75) .25)])))
+      
+ (define (prem-chrge games-played)
+   (cond [(> 100) 25]
+         [(< 100) (* 25 .1)]))
+ 
+      
+      

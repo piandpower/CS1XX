@@ -1,0 +1,58 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname a5q2) (read-case-sensitive #t) (teachpacks ((lib "potatohead.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "potatohead.rkt" "installed-teachpacks")))))
+
+
+
+;; Question 2
+(define (flush? l-cards)
+  [(cond [(empty? l-cards) false]
+         [(< (length l-cards) 5) false]
+         [(
+  ...)
+
+;;samesuit: card card card->boolean
+;;Produces a value true if at least 5 of the cards
+;; have the same suit. false otherwise.
+;;Examples:(samesuit (make-card 4 'spades)
+;;                   (make-card 6 'diamonds)
+;;                   (make-card 9 'spades))=>true
+;;(samesuit (make-card 4 'clubs)
+;;          (make-card 6 'diamonds)
+;;          (make-card 9 'spades))=>false
+(define (samesuit c1 c2 c3)
+  (or (symbol=? (card-suit c1) (card-suit c2))
+      (symbol=? (card-suit c1) (card-suit c3))
+      (symbol=? (card-suit c2) (card-suit c3))))
+;;Tests:
+;;Two of same suit
+(check-expect (samesuit (make-card 4 'spades)
+                        (make-card 6 'diamonds)
+                        (make-card 9 'spades)) true)
+
+(check-expect (samesuit (make-card 4 'diamonds)
+                        (make-card 6 'diamonds)
+                        (make-card 9 'spades)) true)
+
+(check-expect (samesuit (make-card 4 'spades)
+                        (make-card 6 'clubs)
+                        (make-card 9 'clubs)) true)
+(check-expect (samesuit five<3 eight<3 kingodi) true)
+;;Three of same suit
+(check-expect (samesuit (make-card 11 'spades)
+                        (make-card 10 'spades)
+                        (make-card 10 'spades)) true)
+(check-expect (samesuit oneodi twoodi jackodi) true)
+(check-expect (samesuit one-clubs two-clubs jack-clubs) true)
+(check-expect (samesuit one<3 two<3 jack<3) true)
+;;None of same suit
+(check-expect (samesuit (make-card 4 'hearts)
+                        (make-card 6 'diamonds)
+                        (make-card 9 'spades)) false)
+(check-expect (samesuit kingodi one-spad two-clubs) false)
+(check-expect (samesuit kingodi one<3 two-clubs) false)
+(check-expect (samesuit kingodi one<3 two-spad) false)
+
+(check-expect (samesuit (make-card 4 'clubs)
+                        (make-card 6 'diamonds)
+                        (make-card 9 'spades)) false)

@@ -1,0 +1,43 @@
+# Wrtie a function create_email that consumes thre strings:
+# - first (first name)
+# last for last name
+# -domain
+# and creates and roduces an email address as follows
+# F.L@domain
+#with the following restrictions:
+# ** the string F.L contains at most 10 characters (including fullstop)
+# thhe string G contains at most 8 chars form first
+# the string L contains at least 1 char from last
+# all chars are lower case
+# FL contins no space or hyphens
+
+#assume they may contain spaces/hyphens
+## create email: str str str -> str
+def create_email(first,last,domain):
+    max_length=10
+    first_no_space= first.replace(' ','')
+    first_removed= first_no_space.replace('-','')
+    last_no_hyphen= last.repalce(' ','')
+    rem-last= last_no_hyphen.replace('-','')
+    #num first characters min(8,len(first_no_spaces_hyphens)
+    if: len(first_removed)>8 :
+        return first_removed [:8] + "." + last[1]
+    else: len(first) < 8:
+        num_last= max_length - len(first_removed)
+        return first [0: len(first_removed)] + "." + last[:num_last]
+
+    #max_length=10
+    #first_no_hyphen=first.replace('-'.'')
+    #first_no_spaces_hyphens= first_no_hyphens.replace)' ','')
+    #num_first_chars= min( 8, len(first_no_spaces_hyphens))
+    #first_part = first_no_spaces_hyphens[:num_first_chars]
+    #last_okay= last.replace(' ','').replace('-','')
+    #num_last_chars= max_length - 1 - num_first_chars
+    # num_last_keep = min(num_last_chars,len(last_okay))
+    # last_part= last_okay[:num_last_keep]
+    # email_addr= first_part + '.' + last_part + '@' + domain
+    # return email.addr.lower()
+    
+    #print 'testing userid'
+    #print 'testing userid'
+    #print create_email('Jenn','Heil','van2010.olym')==jenn.heil@van2010.olym'

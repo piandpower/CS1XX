@@ -1,0 +1,21 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname untitled) (read-case-sensitive #t) (teachpacks ((lib "potatohead.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "potatohead.rkt" "installed-teachpacks")))))
+;;Lab8 
+
+;;is-prime? : -> nat[>0] -> boolean 
+(define (is-prime? n)
+  (cond
+    [(= 1 n) false]
+    [else (is-prime-ctdown n (sub1 n))]))
+;;Tests:
+(check-expect (is-prime? 1) false)
+(check-expect (is-prime? 2) true)
+(check-expect (is-prime? 14) false)
+(check-expect (is-prime? 13) true)
+
+;Helper 
+(define (is-prime-ctdown n1 n2)
+  (cond [(= 1 n2) true]
+        [(zero? (remainder n1 n2)) false]
+        [else (is-prime-ctdown n1 (sub1 n2))]))

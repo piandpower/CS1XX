@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>CS 116 Tutorial 3 (Solutions): Beginning of Accumulative Recursion</title>
+
+        
+<link rel="stylesheet" type="text/css" href="/~cs116/style.css" />
+<link rel="stylesheet" type="text/css" href="/~cs116/print.css" media="print" />
+
+<!-- If this is IE, run javascript code to fix its behaviour -->
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js"
+        type="text/javascript"></script>
+<![endif]-->
+
+<!-- Function to insert email address invisible to crawlers -->
+<script type="text/javascript">
+   /* <![CDATA[ */
+function insertMailto( $emailuser, $emailhost ) {
+   document.write('<a href=\"mailto:' + $emailuser + ' at ' + $emailhost 
+                  + '\">' + $emailuser + ' at ' + $emailhost + '</a>');
+   /* ]]> */
+}
+</script>
+
+
+</head>
+<body>
+<h1>CS 116: Introduction to Computer Science 2</h1>
+
+<!-- This probably shouldn't be done as a table -->
+<table id="main">
+   <tr>
+      <td id="nav-box">
+         	  <ul id="nav-bar">
+        <li><a href="/~cs116">Announcements&nbsp;/&nbsp;Home</a></li>
+        <li><a href="/~cs116/personnel">Personnel</a>
+        	<ul>
+        		<li><a href="/~cs116/officehours">Office Hours</a></li>
+        		<li><a href="/~cs116/needhelp">Need Help?</a></li>
+        	</ul>
+        </li>
+        <li> <a href="/~cs116/assignments">Assignments</a> 
+        	<ul>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/publictest.php">Public Test System</a></li>
+        		<li><a href="/~cs116/postmortem">Postmortems</a></li>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/protect">Assignment Solutions</a></li>
+        	</ul>
+        </li>
+        
+        <li><a href="/~cs116/Instructor-Specific-page">Instructor Specific Pages</a></li>
+        <li><a href="/~cs116/timetable">Timetable</a></li>
+        <li><a href="/~cs116/exams">Exams</a></li>
+        <li><a href="/~cs116/grading">Grading</a></li>
+        <li><a href="/~cs116/resources">Resources&nbsp;&amp;&nbsp;Links</a></li>
+        <li><a href="/~cs116/handouts">Handouts</a>
+        	<ul> 
+        	<li> <a href="/~cs116/errata">Errata </a> </li>
+        	</ul>
+        </li>
+        <li><a href="/~cs116/styleGuide">Programming&nbsp;Style</a></li>
+        <li><a href="/~cs116/tutorials">Tutorials</a></li>
+		<!-- <li><a href="/~cs116/W09">Winter 2009</a></li> -->
+      </ul>
+
+      </td>
+      <td id="main-box">
+
+
+<h2 class="title">CS 116 Tutorial 3 (solutions): Beginning of Accumulative Recursion (Sept 29 &amp; Oct 1, 2010)</h2>
+<br />
+<ol>
+
+<li>Make a function <code>make-mapper</code> that consumes a function, and returns a
+function that will apply that function to each member of a list.  For
+example, <code>(make-mapper sqr)</code> makes a function that reads in a list of
+numbers and returns the list of the squares of all elements of the
+list. What is the contract of <code>make-mapper?</code>
+
+<blockquote><pre>;; make-mapper: (X -> Y) -> ((listof X) -> (listof Y))
+;; Consumes a function, func, and produces a function which
+;; consumes a list and applies func to each element of that list.
+;; Examples: 
+;; ((make-mapper sqr) empty) => empty
+;; ((make-mapper sqr) (list 10 20)) => (list 100 400)
+(define (make-mapper func)
+  (lambda (lst) (map func lst)))
+(check-expect ((make-mapper sqr) empty) empty)
+(check-expect ((make-mapper sqr) (list 10 20))  (list 100 400))
+(check-expect ((make-mapper list) '(1 2 a b c)) '((1) (2) (a) (b) (c)))</pre></blockquote><br /></li>
+
+<li>Write an accumulatively recursive function <code>sum-list</code> which consumes a list
+of numbers and produces their sum.  Compare your accumulative version
+with the natural structural recursive version (not using <code>foldr</code>): what
+is the trace of <code>(sum-list (list 1 2 3))</code> in both cases?
+<ul>
+<li><b>Using structural recursion:</b>
+<pre>;; sum-list1: (listof num) -> num
+;; Consumes a list of numbers and produces their sum.
+;; examples:
+;; (sum-list1 empty) => 0
+;; (sum-list1 '(1 2 3)) => 6
+(define (sum-list1 l)
+  (cond [(empty? l) 0]
+        [else (+ (first l) (sum-list (rest l)))]))
+(check-expect (sum-list1 empty) 0)
+(check-expect (sum-list1 1) 1)
+(check-expect (sum-list1 '(1 2 3 4 5)) 15)</pre></li>
+
+<li><b>Using accumulative recursion:</b>
+<pre>;; sum-list2: (listof num) -> num
+;; Consumes a list of numbers and produces their sum.
+;; examples:
+;; (sum-list2 empty) => 0
+;; (sum-list2 '(1 2 3)) => 6
+(define (sum-list2 l)
+  ;; sum-list-acc: (listof num) num -> num
+  ;; accumulative helper function: systematically we shrink lst,
+  ;; adding each entry to acc, until we reach the empty list.
+  (local [(define (sum-list-acc lst acc)
+            (cond [(empty? lst) acc]
+                  [else (sum-list-acc (rest lst) (+ acc (first lst)))]))]
+    (sum-list-acc l 0)))
+(check-expect (sum-list2 empty) 0)
+(check-expect (sum-list2 '(1)) 1)
+(check-expect (sum-list2 '(1 2 3 4 5)) 15)</pre></li>
+
+<li><b>Trace in structural recursion:</b>
+<pre>(sum-list1 (list 1 2 3))
+=> (+ 1 (sum-list1 (list 2 3)))
+=> (+ 1 (+ 2 (sum-list1 (list 3))))
+=> (+ 1 (+ 2 (+ 3 (sum-list1 empty))))
+=> (+ 1 (+ 2 (+ 3 0)))
+=> (+ 1 (+ 2 3))
+=> (+ 1 5)
+=> 6</pre></li>
+
+<li><b>Trace in accumulative recursion:</b>
+<pre>(sum-list2 (list 1 2 3))
+=> (sum-list-acc (list 1 2 3) 0)
+=> (sum-list-acc (list 2 3) (+ 0 1))
+=> (sum-list-acc (list 2 3) 1)
+=> (sum-list-acc (list 3) (+ 1 2))
+=> (sum-list-acc (list 3) 3)
+=> (sum-list-acc empty (+ 3 3)
+=> (sum-list-acc empty 6)
+=> 6</pre></li>
+</ul><br /></li>
+
+<li><p>Write an accumulatively recursive function <code>find</code> that reads in a list of
+symbols <code>alos</code> and a symbol <code>sym</code>, and returns the list of indices of
+positions in <code>alos</code> with symbol <code>sym</code>.  Recall that the first position in a
+list has index 0.  You may use <code>reverse</code>.</p>
+
+<p>For example, <code>(find '(a v d v) 'v)</code> should return <code>'(1 3)</code>, while 
+<code>(find '(a v d v) 'q)</code> should return <code>empty</code>.</p>
+
+<blockquote><pre>;; find: (listof symbol) symbol -> (listof nat)
+;; identifies positions in alos that have symbol sym at them.
+;; examples:
+;; (find empty 'x) => empty
+;; (find '(a v d v) 'v) => (list 1 3)
+;; (find '(a v d v) 'q) => empty
+
+(define (find alos sym)
+  (local
+    ;; find-acc: (listof symbol) nat (listof nat) -> (listof nat)
+    ;; accumulatively examine the list to find positions that have sym
+    ;; at them.  The variable currpos stores the position in alos of the
+    ;; first element of lst (which increases), and acc accumulates the
+    ;; list of positions found.
+    [(define (find-acc lst currpos acc)
+       (cond [(empty? lst) (reverse acc)]
+             [(equal? (first lst) sym)
+              (find-acc (rest lst) (add1 currpos) (cons currpos acc))]
+             [else (find-acc (rest lst) (add1 currpos) acc)]))]
+    (find-acc alos 0 empty)))
+
+(check-expect (find empty 'x) empty)
+(check-expect (find '(a v d v) 'v) (list 1 3))
+(check-expect (find '(a v d v) 'q) empty)</pre></blockquote>
+
+<p>It's important to see that <code>sym</code> is not a parameter to <code>find-acc</code>;
+<code>sym</code> already has the correct definition there, as it is a parameter to
+<code>find</code>.  We could pass it as a parameter to <code>find-acc</code>, but it is not
+necessary.</p><br /></li>
+
+<li>Extend <code>find</code> to a function <code>find-pattern</code> that identifies 
+all positions in a list of symbols where a supplied pattern (list of symbols)
+starts.
+
+<blockquote><pre>;; matches?: (listof symbol) (listof symbol) -> boolean
+;; Consuems two lists of symbols, text and pattern, and produces true
+;; if text begins with pattern (produces false otherwise).
+;; examples:
+;; (matches? empty '(a b)) => false
+;; (matches? '(a b) empty) => true
+;; (matches? '(a b c) '(a b)) => true
+;; (matches? '(d b c) '(a b)) => false
+;; (matches? '(a b) '(a b c)) => false
+;; (matches? '(a a b) '(a b)) => false
+
+(define (matches? text pattern)
+    (cond [(empty? pattern) true]
+        [(empty? text) false]
+        [else (and (equal? (first text) (first pattern))
+                   (matches? (rest text) (rest pattern)))])) 
+                   
+(check-expect (matches? empty empty)  true)
+(check-expect (matches? empty '(a b))  false)
+(check-expect (matches? '(a b) empty)  true)
+(check-expect (matches? '(a b c) '(a b))  true)
+(check-expect (matches? '(d b c) '(a b))  false)
+(check-expect (matches? '(a b) '(a b c)) false)
+(check-expect (matches? '(a a b) '(a b)) false)
+
+;; find-pattern: (listof symbol) (listof symbol) -> (listof nat)
+;; identifies positions in text that have pattern begin at them.
+;; examples:
+;; (find-pattern empty '(x a)) => empty
+;; (find-pattern '(a v d v) '(v d)) => (list 1)
+;; (find-pattern '(a v d v) '(v v)) => empty
+
+(define (find-pattern text pattern)
+  ;; find-pat-acc: (listof symbol) nat (listof nat) -> (listof nat)
+  ;; accumulatively examine suffix to find positions that match 
+  ;; the pattern.  The variable currpos stores the position in alos of the
+  ;; first element of lst (which increases), and acc accumulates the
+  ;; list of positions found.
+  (local [(define (find-pat-acc lst currpos acc)
+            (cond [(empty? lst) (reverse acc)]
+                  [(matches? lst pattern) 
+		           (find-pat-acc (rest lst) (add1 currpos) (cons currpos acc))]
+                  [else (find-pat-acc (rest lst) (add1 currpos) acc)]))]
+    (find-pat-acc text 0 empty)))
+
+(check-expect (find-pattern empty '(x a)) empty)
+(check-expect (find-pattern '(a v d v) '(v d))  (list 1))
+(check-expect (find-pattern '(a v d v) '(v v))  empty)
+(check-expect (find-pattern '(a v d v v a a a v d) '(v d)) (list 1 8))</pre></blockquote><br /></li>
+
+
+<li><p>Develop a function <code>build-number</code> that consumes a list, <code>digits</code>,
+of numbers between 0 and 9, and returns the number corresponding to <code>digits</code>.
+(This is exercise 31.3.7 from HtDP.)</p>
+
+<p>For example, <code>(build-number '(9 0 8))</code> should return <code>908</code>, while
+<code>(build-number '(8 6))</code> should return <code>86</code>.</p>
+<p>Trace the application <code>(build-number '(8 0 2))</code></p>
+
+<ul>
+<li><b>Solution:</b>
+<pre>;; build-number: (listof nat[&lt;=9]) -> nat
+;; builds a number from its list of digits
+;; examples:
+;; (build-number '(9 0 8)) => 908
+;; (build-number '(8 6)) => 86
+
+(define (build-number digits)
+  (local
+    ;; build-number-acc: (listof nat[&lt;= 9]) nat -> nat
+    ;; Consumes a list of digits, d1 ... di, and a number acc of length n, and produces
+    ;; the number beginning with the n digits of acc, and concluding with the digits
+    ;; d1 ... di.
+    [(define (build-number-acc dig acc)
+       (cond [(empty? dig) acc]
+             [else (build-number-acc (rest dig) (+ (* 10 acc) (first dig)))]))]
+    (build-number-acc digits 0)))
+
+(check-expect (build-number '(9 0 8)) 908)
+(check-expect (build-number '(8 6)) 86)</pre></li>
+
+<li><b>Trace:</b>
+<pre>(build-number '(8 0 2))
+=> (build-number-acc '(8 0 2) 0)
+=> (build-number-acc '(0 2) (+ (* 10 0) 8))
+=> (build-number-acc '(0 2) 8)
+=> (build-number-acc '(2) 80)
+=> (build-number-acc empty 802)
+=> 802</pre></li>
+</ul></li>
+
+</ol>
+</td>
+</tr>
+</table>
+
+<div class="validator">
+<!-- If this is IE, display this link -->
+<!--[if lt IE 8]>
+<a href="http://code.google.com/p/ie7-js/">
+   <img style="border:0;width:88px"
+   src="http://ie7-js.googlecode.com/svn/version/ie7.gif"
+   alt="IE7 library used" />
+</a>
+<![endif]-->
+<a href="http://validator.w3.org/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://www.w3.org/Icons/valid-xhtml10-blue"
+   alt="Valid XHTML 1.0 Strict" />
+</a>
+<a href="http://jigsaw.w3.org/css-validator/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+   alt="Valid CSS!" />
+</a>
+</div>
+
+<p class="lastModified">
+Last modified on 
+  
+  Friday, 15 October 2010, at 10:59 hours.
+</p>
+
+
+</body>
+</html>

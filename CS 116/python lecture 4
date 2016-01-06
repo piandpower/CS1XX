@@ -1,0 +1,14 @@
+def L-rec(L):
+    if (L==[]): #len(L)== 0
+        ....
+    elseL
+    #first is L[0]
+    #rec on L[1:]
+    
+def sum_list(L):
+    if L==[]:
+        return 0
+    else:
+        total= L[0]+ sum_list(L[1:])
+        return total
+    

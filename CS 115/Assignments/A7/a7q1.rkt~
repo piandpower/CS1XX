@@ -1,0 +1,24 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a7q1) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt" "installed-teachpacks")))))
+
+
+
+
+
+;; Question 1
+(define (factor-power2 expr)
+  ...)
+
+(define (max-pwr2-factor even num)
+  (cond [(not (equal? (remainder even 2) 0)) even]
+        [(not (equal? (remainder even num) 0)) num]
+        [else (max-pwr2-factor even (* num 2))]))
+
+(max-pwr2-factor 40 2) ; to get number then 
+
+(define (split-prod even num)
+  
+
+
+

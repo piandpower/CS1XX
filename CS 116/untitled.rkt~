@@ -1,0 +1,25 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname untitled) (read-case-sensitive #t) (teachpacks ((lib "potatohead.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "potatohead.rkt" "installed-teachpacks")))))
+;;*******************************************
+;; CS 115 Assignment 1, Question 1
+;; Christopher Alert
+;;
+;; (Calculating body mass index)
+;;
+;;********************************************
+
+
+
+
+(define (convert-kg weight-lb) (/ weight-lb 2.2))
+
+(define (convert-m height-ft height-in) 
+  (/ (* 2.54 (+ (* height-ft 12) height-in))100))
+
+
+(define (calc-bmi height-ft height-in weight-lb)
+  (/ (convert-kg weight-lb)
+  (* (convert-m height-ft height-in)
+     (convert-m height-ft height-in))))
+  

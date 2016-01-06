@@ -1,0 +1,24 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname a2q2) (read-case-sensitive #t) (teachpacks ((lib "potatohead.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "potatohead.rkt" "installed-teachpacks")))))
+;; Question 2
+
+
+(
+
+
+
+;;create-userid str str str num[not 1] -> str
+;; Produces a username
+(define (create-userid first middle last index)
+  (string-append (first-let
+   
+   
+;; first-let: str -> str
+;; Produces a string of the lower case first letter
+;; of string first , that is, the person's first name
+;; Example:(first-let "theo")=> "t"
+;;         (first-let "charles")=> "c"
+(define (first-let first)
+  (substring first 0 1))
+   

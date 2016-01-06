@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>CS 116 Tutorial 7 (Solutions): Running Time Review and Lists &amp; Strings in Python</title>
+
+        
+<link rel="stylesheet" type="text/css" href="/~cs116/style.css" />
+<link rel="stylesheet" type="text/css" href="/~cs116/print.css" media="print" />
+
+<!-- If this is IE, run javascript code to fix its behaviour -->
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js"
+        type="text/javascript"></script>
+<![endif]-->
+
+<!-- Function to insert email address invisible to crawlers -->
+<script type="text/javascript">
+   /* <![CDATA[ */
+function insertMailto( $emailuser, $emailhost ) {
+   document.write('<a href=\"mailto:' + $emailuser + ' at ' + $emailhost 
+                  + '\">' + $emailuser + ' at ' + $emailhost + '</a>');
+   /* ]]> */
+}
+</script>
+
+
+</head>
+<body>
+<h1>CS 116: Introduction to Computer Science 2</h1>
+
+<!-- This probably shouldn't be done as a table -->
+<table id="main">
+   <tr>
+      <td id="nav-box">
+         	  <ul id="nav-bar">
+        <li><a href="/~cs116">Announcements&nbsp;/&nbsp;Home</a></li>
+        <li><a href="/~cs116/personnel">Personnel</a>
+        	<ul>
+        		<li><a href="/~cs116/officehours">Office Hours</a></li>
+        		<li><a href="/~cs116/needhelp">Need Help?</a></li>
+        	</ul>
+        </li>
+        <li> <a href="/~cs116/assignments">Assignments</a> 
+        	<ul>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/publictest.php">Public Test System</a></li>
+        		<li><a href="/~cs116/postmortem">Postmortems</a></li>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/protect">Assignment Solutions</a></li>
+        	</ul>
+        </li>
+        
+        <li><a href="/~cs116/Instructor-Specific-page">Instructor Specific Pages</a></li>
+        <li><a href="/~cs116/timetable">Timetable</a></li>
+        <li><a href="/~cs116/exams">Exams</a></li>
+        <li><a href="/~cs116/grading">Grading</a></li>
+        <li><a href="/~cs116/resources">Resources&nbsp;&amp;&nbsp;Links</a></li>
+        <li><a href="/~cs116/handouts">Handouts</a>
+        	<ul> 
+        	<li> <a href="/~cs116/errata">Errata </a> </li>
+        	</ul>
+        </li>
+        <li><a href="/~cs116/styleGuide">Programming&nbsp;Style</a></li>
+        <li><a href="/~cs116/tutorials">Tutorials</a></li>
+		<!-- <li><a href="/~cs116/W09">Winter 2009</a></li> -->
+      </ul>
+
+      </td>
+      <td id="main-box">
+
+
+<h2 class="title">Tutorial 7 (Solutions): Running Time Review and Lists &amp; Strings in Python (Oct 27 &amp; 29, 2010)</h2>
+
+<ol>
+
+<li> Determine the best and worst case running times of the following four functions:
+<ol>
+<li>
+<pre>;; reverse-search: (listof any) any -> boolean 
+;; Note: assume reverse is the accumulative version discussed in class
+(define (reverse-search lst target) 
+  (cond 
+    [(empty? lst) false] 
+    [(equal? (first lst) target) true] 
+    [else (reverse-search (reverse (rest lst)) target)]))</pre>
+
+<p> Worst Case: Quadratic. Consider a list of length n that doesn't contain <code>target</code>.
+The first call to <code>reverse-search</code> takes around n+2 steps, since the function needs to
+look at each element in the list once in order to reverse it (after checking that <code>lst</code>
+is nonempty and that <code>target</code> is not the first element in the list).
+The second call will take n+1 steps, since you
+only need to reverse <code>(rest lst)</code>. The third call will take n-2 steps, etc. The total
+number of steps will therefore be (n+2)+(n+1)+... => O(n^2).</p>
+
+<p> Best Case: Constant. If <code>target</code> is the first element of <code>lst</code>, then
+it will take two steps to check no matter how long the list is: one to see that <code>lst</code>
+is nonempty, and one to check equality of <code>target</code> and <code>(first lst)</code>.
+</p></li>
+    
+<li>
+<pre>;; sum-of-divisors: nat -> nat 
+(define (sum-of-divisors n) 
+    (foldr + 0  
+          (filter (lambda (y) (zero? (remainder n y))) 
+                  (build-list n add1))))</pre>
+ 
+<p> Linear: <code>build-list</code> takes n steps to create the list, then <code>filter</code>
+takes n steps to check if each element is divisible by n. Finally, <code>foldr</code> will make
+between 0 and n calls to +. The function therefore takes between 2n and 3n steps to run, so is
+linear in both the best and worst case. </p></li>
+    
+<li>
+<pre>;; grow-duplicates: (listof X) -> (listof X) 
+(define (grow-duplicates lst) 
+    (cond 
+        [(empty? lst) empty] 
+        [(empty? (rest lst)) empty] 
+        [(empty? (filter (lambda (x) (equal? x (first lst))) (rest lst)))  
+         (grow-duplicates (rest lst))] 
+        [else (append (grow-duplicates (rest lst))  
+                      (list (first lst)) 
+                      (grow-duplicates (rest lst)))]))</pre>
+ 
+<p> Worst case: Exponential. In the <code>else</code> case, we need to call
+<code>(grow-duplicates (rest lst))</code> twice. These will in turn call 
+<code>(grow-duplicates (rest (rest lst)))</code> four times total, etc., so the function has
+exponential running time.</p>
+
+<p> Best case: Quadratic. To find the best case, we know we need to avoid the exponential
+<code>else</code> case. The only other recursive case is the third, so we should focus on that.
+Each time the function gets to that case, it must call <code>filter</code> on <code>(rest lst)</code>,
+which will take n steps the first time it's called, n-1 the second, etc. Add that to the
+two steps each recursive call takes (to check that <code>lst</code> and <code>(rest lst)</code> are
+nonempty, and our function has a best case runtime of (n+1)+n+(n-1)+... => O(n^2).</p></li>
+    
+<li>
+<pre>;; swap-posn-values: (listof posn) -> (void)
+(define (swap-posn-values lop)
+  (cond
+    [(empty? lop) empty]
+    [(empty? (rest lop)) lop]
+    [else
+     (cons (second lop)
+           (cons (first lop) (rest (rest lop))))]))</pre>
+
+<p> Constant. Because there are no recursive calls, it takes the same amount of time
+to call this function on a list of 3 elements and a list of 3,000,003 elements.</p></li>
+</ol></li>
+
+<li><p>Write a  function <code>fill_the_string</code> that consumes a nonempty string s
+and a positive integer n, and which makes an n-letter string that
+consists of copies of s, where the last one is perhaps a partial copy.</p>
+
+<p>For example, <code>fill_the_string ("love",12)</code> returns <code>"lovelovelove"</code>,
+while <code>fill_the_string ("truth",12)</code> returns <code>"truthtruthtr"</code></p>
+
+<blockquote><pre># fill_the_string: str[nonempty] int[>0] -> str
+# Makes an n-letter string made up of copies of s; the final copy
+# might not be a complete copy.
+# Examples:
+# fill_the_string ("love",12) => "lovelovelove"
+# fill_the_string ("love",2) => "lo"
+# fill_the_string ("love,22) => "lovelovelovelovelovelo"
+# fill_the_string ("truth",0) => ""
+
+def fill_the_string (s,n):
+    return s * (n/len(s)) + s [:n%len(s)]
+
+print 'Test 1: fill_the_string ("love",12) => "lovelovelove"'
+print fill_the_string("love",12) == "lovelovelove"
+print 'Test 2: fill_the_string ("love",2) => "lo"'
+print fill_the_string("love",2) == "lo"
+print 'Test 3: fill_the_string ("love,22) => \ "lovelovelovelovelovelo"'
+print fill_the_string("love",22) == "lovelovelovelovelovelo"
+print 'Test 4: fill_the_string ("love",0) => ""'
+print fill_the_string("love",0) == ""
+</pre></blockquote>
+
+A few comments:
+<ol>
+<li>There are much longer ways to write this function, which are
+certainly fine.</li>
+
+<li>We used integer division here when we divided n by len(s).  That
+gave us the right number of complete copies of s we needed.</li>
+
+<li>If we'd had <code>s * n / len (s)</code>, it wouldn't have worked.  We would
+have first computed <code>s * n</code> (the string with n copies of s), and then
+tried to use / to divide this by <code>len(s)</code>. But this gives the error:
+
+<br /><code>TypeError: unsupported operand type(s) for /: 'str' and 'int'</code></li>
+
+<li>You might have had the idea of using floating point multiplication,
+and tried to multiply s by a float.  But that doesn't work, either:
+<br /><code>>>  "love" * 3.5</code>
+<br /><code>TypeError: can't multiply sequence by non-int of type 'float'</code></li>
+</ol>
+</li>
+
+<li>Write a recursive function <code>palindrome</code> that consumes a
+string and returns <code>True</code> if it's a palindrome and <code>False</code> othewise.
+A palindrome is a string that is identical to its reverse.
+
+<blockquote><pre># palindrome: str -> bool
+# Returns true if s is a palindrome, False otherwise.
+# examples:
+# palindrome ("") => true
+# palindrome ("a") => true
+# palindrome ("ab") => false
+# palindrome ("aba") => true
+# palindrome ("abba") => true
+
+def palindrome (s):
+    L = len(s)
+    if L &lt; 2:
+        return True
+    elif not s[0] == s[L-1]:
+        return False
+    else:
+        return palindrome (s[1:L-1])
+        
+print "Testing palindrome" 
+print 'Test 1: palindrome ("")'
+print palindrome("") == True
+print 'Test 2 palindrome ("a")' 
+print palindrome("a") == True
+print 'Test 3: palindrome ("ab")'
+print palindrome("ab") == False
+print 'Test 4: palindrome ("aba")' 
+print palindrome("aba") == True 
+print 'Test 5: palindrome ("abba")' 
+print palindrome("abba") == True  
+print 'Test 6: palindrome ("abcde")' 
+print palindrome("abcde") == False 
+</pre></blockquote></li>
+
+<li>Write a function <code>all_same_type</code> that reads in a list and
+identifies if all members of that list are of the same type.
+
+<blockquote><pre># all_same_type: (listof any) -> bool
+# identifies if all elements of L are the same type.
+# Examples:
+# all_same_type ([]) => True
+# all_same_type (["a"]) => True
+# all_same_type (["a",1]) => False
+# all_same_type (["a","b"]) => True
+
+def all_same_type (L): 
+    if len(L)&lt;=1: 
+        return True 
+    else: 
+        return (type(L[0])==type(L[1]) and
+                  all_same_type(L[1:len(L)]))
+                  
+def all_same_type_alt (L): 
+    if L == []: return True 
+    first = type(L[0]) 
+    not_like_first = filter (lambda x: (type (x) != first), L) 
+     ## not_like_first is the list containing all members of L
+     ## that are not the same type as L(0) 
+    return not_like_first == []
+
+
+print "Tests for all_same_type"
+print "Empty List"
+print all_same_type ([]) == True
+print "One item list"
+print all_same_type (["a"]) == True
+print "Two item list: different types"
+print all_same_type (["a",1]) == False
+print "Two item list: same types"
+print all_same_type (["a","b"]) == True
+print "int and float"
+print all_same_type ([1,1.0]) == False
+print "(listof num) and (listof str)"
+print all_same_type ([[1,2],['b','c']]) == True
+print "longer list: same types"
+print all_same_type([1,2,3,4,5,6,7]) == True
+print "longer list: different types"
+print all_same_type([1,2,'3',[4],'5',6,7]) == False
+</pre></blockquote>
+
+Note that Python's built-in <code>type</code> function does not distinguish
+between types of lists: <code>type([1,2]) == type(['a','b'])</code>
+will produce true.
+</li>
+
+<li><p> Represent a card by a two-element list, [value, suit], where value is
+an integer from 1 to 10 inclusive, and suit is a string from the set
+that contains "clubs", "spades", "diamonds", "hearts".  So, for
+example, the Two of Spades would be represented by [2, "spades"].</p>
+
+<p>Write a function <code>flip_colour</code> that reads in a card and then returns a
+card of the same value, but with from a different colour: if the card
+read in is a heart, the returned card is a spade (and vice versa),
+while if the card read in is a club, the returned card is a diamond
+(and vice versa).</p>
+
+<p>Then write a function <code>flip_hand</code> that reads in a list of cards (a
+hand), and produces a new list of cards where each card has had its
+colour flipped in this way.</p>
+
+<blockquote><pre># example definitions:
+club4 = [4,"clubs"]
+diamond4 = [2,"diamonds"]
+spade3 = [3,'spades']
+heart3 = [3,'hearts']
+
+# flip_colour: card -> card
+# returns a card of the same value, but if C is a spade, returns a
+# heart (and vice versa), and if C is a club, returns a diamond (and
+# vice versa).
+# Examples:
+# flip_colour (club4) => [4,'diamonds']
+# flip_colour (diamond4) => [4,'clubs']
+# flip_colour (spade3) => [3,'hearts']
+# flip_colour (heart3) => [3,'spades']
+
+def flip_colour (C):
+    val = C[0]
+    s = C[1]
+    if s == 'hearts':
+        return [val,'spades']
+    if s == 'spades':
+        return [val,'hearts']
+    if s == 'clubs':
+        return [val,'diamonds']
+    return [val,'clubs']
+    
+"Tests for flip_colour"
+print flip_colour (club4) == [4,'diamonds']
+print flip_colour (diamond4) == [4,'clubs']
+print flip_colour (spade3) == [3,'hearts']
+print flip_colour (heart3) == [3,'spades']
+print club4 == [4,'clubs']  ## It doesn't hurt to make sure you didn't mutate the cards
+
+# flip_hand: (listof card) -> (listof card)
+# makes a new list of cards whose values are the same as in hand, but
+# with each card's suit flipped by flip_colour.
+# Examples:
+# flip_hand ([]) => []
+# flip_hand ([club4,heart3]) => [[4,'diamonds'],[3,'spades']]
+
+def flip_hand (hand):
+   return map (flip_colour,hand)
+   
+"Tests for flip_hand"
+print flip_hand([]) == []
+print flip_hand([club4]) == [4, 'diamonds']
+print flip_hand([diamond4, spade3, heart3]) == [[4,'clubs'],[3,'hearts'],[3,'spades']]
+</pre></blockquote>
+</li>
+</ol>
+
+</td>
+</tr>
+</table>
+
+<div class="validator">
+<!-- If this is IE, display this link -->
+<!--[if lt IE 8]>
+<a href="http://code.google.com/p/ie7-js/">
+   <img style="border:0;width:88px"
+   src="http://ie7-js.googlecode.com/svn/version/ie7.gif"
+   alt="IE7 library used" />
+</a>
+<![endif]-->
+<a href="http://validator.w3.org/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://www.w3.org/Icons/valid-xhtml10-blue"
+   alt="Valid XHTML 1.0 Strict" />
+</a>
+<a href="http://jigsaw.w3.org/css-validator/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+   alt="Valid CSS!" />
+</a>
+</div>
+
+<p class="lastModified">
+Last modified on 
+  
+  Friday, 29 October 2010, at 10:41 hours.
+</p>
+
+
+</body>
+</html>

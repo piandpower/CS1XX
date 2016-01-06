@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>CS 116 Tutorial 1: Getting Reacquainted with Scheme and DrRacket</title>
+
+        
+<link rel="stylesheet" type="text/css" href="/~cs116/style.css" />
+<link rel="stylesheet" type="text/css" href="/~cs116/print.css" media="print" />
+
+<!-- If this is IE, run javascript code to fix its behaviour -->
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js"
+        type="text/javascript"></script>
+<![endif]-->
+
+<!-- Function to insert email address invisible to crawlers -->
+<script type="text/javascript">
+   /* <![CDATA[ */
+function insertMailto( $emailuser, $emailhost ) {
+   document.write('<a href=\"mailto:' + $emailuser + ' at ' + $emailhost 
+                  + '\">' + $emailuser + ' at ' + $emailhost + '</a>');
+   /* ]]> */
+}
+</script>
+
+
+</head>
+<body>
+<h1>CS 116: Introduction to Computer Science 2</h1>
+
+<!-- This probably shouldn't be done as a table -->
+<table id="main">
+   <tr>
+      <td id="nav-box">
+         	  <ul id="nav-bar">
+        <li><a href="/~cs116">Announcements&nbsp;/&nbsp;Home</a></li>
+        <li><a href="/~cs116/personnel">Personnel</a>
+        	<ul>
+        		<li><a href="/~cs116/officehours">Office Hours</a></li>
+        		<li><a href="/~cs116/needhelp">Need Help?</a></li>
+        	</ul>
+        </li>
+        <li> <a href="/~cs116/assignments">Assignments</a> 
+        	<ul>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/publictest.php">Public Test System</a></li>
+        		<li><a href="/~cs116/postmortem">Postmortems</a></li>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/protect">Assignment Solutions</a></li>
+        	</ul>
+        </li>
+        
+        <li><a href="/~cs116/Instructor-Specific-page">Instructor Specific Pages</a></li>
+        <li><a href="/~cs116/timetable">Timetable</a></li>
+        <li><a href="/~cs116/exams">Exams</a></li>
+        <li><a href="/~cs116/grading">Grading</a></li>
+        <li><a href="/~cs116/resources">Resources&nbsp;&amp;&nbsp;Links</a></li>
+        <li><a href="/~cs116/handouts">Handouts</a>
+        	<ul> 
+        	<li> <a href="/~cs116/errata">Errata </a> </li>
+        	</ul>
+        </li>
+        <li><a href="/~cs116/styleGuide">Programming&nbsp;Style</a></li>
+        <li><a href="/~cs116/tutorials">Tutorials</a></li>
+		<!-- <li><a href="/~cs116/W09">Winter 2009</a></li> -->
+      </ul>
+
+      </td>
+      <td id="main-box">
+
+
+<h2 class="title">CS 116 Tutorial 1: getting reacquainted with Scheme and DrRacket. (Sept 15 &amp; 17, 2010)</h2>
+
+<h2>Reminders</h2>
+	<ul>
+	<li>DrRacket: how to install, etc.</li>
+	<li>Picking language level (for the first 1 module, Intermediate Student)</li>
+	<li>Reminders of how to save and load files, how to use the helpdesk, etc.</li>
+	<li>REPL loop</li>
+	<li>How to submit homework files</li>
+	</ul>
+
+
+<h2>Scheme problems</h2>
+
+<ol>
+<li><h3>Example with structures</h3>
+
+<p>Structure: A <code>card</code> has a value <code>v</code> and a suit <code>s</code>, where <code>v</code> is an integer
+between 1 and 10 and <code>s</code> is a member of the set <code>'diamonds, 'hearts,
+'clubs, 'spades</code>.</p>
+
+<p>Data definition: a <code>card</code> is a structure <code>(make-card v s)</code> where <code>v</code> is an
+integer from 1 to 10 and <code>s</code> is a member of the set <code>'diamonds, 'hearts,
+'clubs, 'spades</code>.  Structure definition: <code>(define-struct card (value
+suit))</code></p>
+
+<ul>
+<li>
+<p>Write a function <code>war-turn</code> that consumes two cards and identifies which
+of two players wins a turn in the game <i>War</i> if those are the two cards
+played.</p>
+
+<p>The winner of the turn is 1 if the higher card is the first argument
+to <code>war-turn</code>, 2 if the higher card is the second argument to <code>war-turn</code>,
+or the symbol <code>'war</code> if both players played cards with the same value.
+</p>
+</li>
+</ul></li>
+
+
+<li><h3>Example with a list of structures</h3>
+
+<p>structure: a <code>foodcan</code> has a height, a radius, a weight (all numbers) and a label (a symbol).</p>
+
+<p>Data definition: a foodcan is a structure <code>(make-foodcan h r w l)</code> where
+<code>h</code>, <code>r</code> and <code>w</code> are numbers and <code>l</code> is a symbol.  
+<code>h</code> and <code>r</code> are in centimetres,
+while <code>w</code> is in grams.  Structure definition: <code>(define-struct foodcan
+(height radius weight label))</code></p>
+
+<p>test definitions: 
+<code>(define tomatocan (make-foodcan 10 4 400 'tomatoes))
+(define beancan (make-foodcan 9 3 200 'beans))</code></p>
+
+
+<ul>
+<li>Write a function to compute the height of the tower of foodcans that
+would be produced if we stacked them on top of each other</li>
+
+<li>Write a function <code>total-volume</code> to compute the total volume of the cans
+in a list of foodcans.  (Note that here we're going to use foldr and
+map)</li>
+</ul></li>
+
+<li><h3>Example with counting down and up</h3>
+
+<ul>
+<li>Write a Scheme function powers-of-two that consumes a
+nonnegative integer n and produces a list of integers that are the
+powers of 2 from 2^n down to 2^0 = 1.</li>
+
+<li>Write a Scheme function <code>factors</code> that consumes a number <code>n</code> (at least 1)
+and returns the increasing list of all positive factors of <code>n</code>.</li>
+</ul></li>
+
+</ol>
+
+</td>
+</tr>
+</table>
+
+<div class="validator">
+<!-- If this is IE, display this link -->
+<!--[if lt IE 8]>
+<a href="http://code.google.com/p/ie7-js/">
+   <img style="border:0;width:88px"
+   src="http://ie7-js.googlecode.com/svn/version/ie7.gif"
+   alt="IE7 library used" />
+</a>
+<![endif]-->
+<a href="http://validator.w3.org/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://www.w3.org/Icons/valid-xhtml10-blue"
+   alt="Valid XHTML 1.0 Strict" />
+</a>
+<a href="http://jigsaw.w3.org/css-validator/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+   alt="Valid CSS!" />
+</a>
+</div>
+
+<p class="lastModified">
+Last modified on 
+  
+  Friday, 17 September 2010, at 14:48 hours.
+</p>
+
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname |lab 11|) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt" "installed-teachpacks") (lib "compound.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt" "installed-teachpacks") (lib "compound.rkt" "installed-teachpacks")))))
+;(Mutual Recusrion lAB
+
+(define-struct obs (alpha omega))
+;;An obs structure is a structure (make-ibs a 0) where
+;;a is an obs-list
+;;o is a ref
+
+;;An obs-list is
+;;empty 
+;;or
+;;(cons o olst) where o is an obs and olst is an obs-list
+
+(define-struct ref (epsilon beta))
+;;A ref is a structure (make-ref e b) where
+;;e is a number
+;;b is an obs-list
+
+(define (count-obs an-obs)
+  (+ 1 (count-obs-list (obs-alpha alist))
+     
+     
+     ;;a8q4
+     
+;; step1: modify (eval and apply this two mutually recursive function) This question is based on the knowledge of the two function.
+     
+     ;;how to modify?
+     ;;( exactly same cond some expression. We only change th result instead of producing a number we produce a list of length two.
+     
+   ;;  (list ____ _____)
+     ;; result of evaluation      how many 0's wae accumulated
+     ;;you need a helper fn in apply function
+     
+     ;(define (combine operation list1 list2)
+      ; _____
+      ; _____)
+     
+     ;main function just call 
+     ;(second of the two element list)
+     
+     ;; + (2 0) (0 1)
+     ;;   (+ 2 0) (2  )

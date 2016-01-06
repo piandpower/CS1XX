@@ -1,0 +1,29 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a6q4) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+;;*********************************************************
+;; CS 115 Assignment 6, Question 1
+;; Christopher Alert
+;;
+;;(Calculating the amount of interest gained from Jake's 
+;; investment banking strategy )
+;;
+;;*********************************************************
+
+;; Question 4
+
+(define-struct clock (hours mins))
+;; A clock is a structure (make-clock h m), where
+;; 	h is an integer in the range from 0 to 23 and
+;; 	m is an integer in the range from 0 to 59.
+
+(define-struct flight (from to departure duration))
+;; An flight is a structure (make-flight f t d du) where
+;; 	f is a string representing the origin of the flight,
+;; 	t is a string representing the destination of the flight,
+;; 	d is a clock structure representing the departure time, and
+;; 	du is a natural number representing the flight time in minutes.
+
+
+(define (minimum-waiting-time w-lof v-lof)
+  ...)

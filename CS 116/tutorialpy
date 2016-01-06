@@ -1,0 +1,27 @@
+hello="hello world"
+##dir lists all commands you can doon an object
+
+dir(hello)
+
+## help : it tells you different things you can do.. 
+## create_account_number: int -> int
+## purpose:  ti add a check digit to the given account number.
+## example: crete_account_number(123) => 1236
+def create_account_number(n):
+     total=0
+     while n !=0:
+     digit_total += n % 10
+     n= n / 10
+     return n* 10+ digit_total % 7
+     print 'digit total is now' digit_total
+## test cases for create_account_number
+print "Test_1"
+expected=1236
+actual = create_account_number(123)
+print actual==expected
+
+
+
+##pass -> not complain about empty function.
+
+## ook through style guide.

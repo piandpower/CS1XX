@@ -1,0 +1,16 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a6q2) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+
+
+
+;; Question 2
+(define (make-digit-list n d)
+  ...)
+
+
+;;fn to create the string appaned on countdown to create the list of req length
+;;''fn to construct the list recursively puttin the elements (strings) together
+;first string n long with d as the number , 
+;;second string n-1 long w/ d+1 as the number stop before 0 , stop at 1
+;;last number is D+N -1

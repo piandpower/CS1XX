@@ -1,0 +1,41 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a7q4) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt" "installed-teachpacks")))))
+;;********************************************************;;
+;; CS 115 Assignment 7, Question 4                        ;;
+;; Christopher Alert                                      ;;
+;;                                                        ;;
+;;(Determining the parent with the most numerous offspring;;
+;; from within the evolutionary tree)                     ;;
+;;                                                        ;;
+;;********************************************************;;
+
+
+(define-struct movie-info (name director duration type))
+;; A movie-info is a structure (make-movie-info n d du t), where 
+;; n is a string (for the name of the movie, d is a string for
+;; director of the movie, du is a nat for the length of the 
+;; movie (in minutes), and t is a symbol of the type (or 
+;; genre) of the movie (e.g. 'drama, 'comedy, etc.)
+
+(define-struct movie-rating-node (rating movies left right))
+;; A movie-bst is empty, or 
+;; (make-movie-rating-node r m lft rgt), where r is 
+;; a number between 0 and 10 (the rating level of a movie), 
+;; m is a (listof movie-info) for the list of movies with 
+;; rating r, and lft and rgt are of type movie-bst. The 
+;; ratings in lft are all less than r, and the ratings in rgt 
+;; are all greater than r. 
+
+
+;; Question 4
+(define (good-movies imdb target)
+  ...)
+
+;(define (fun t)
+;  (cond
+;    [(empty? t) ...]
+;    [else ...(node-key t)..
+;          ...(node-val t)..
+;          ...(fun (node-left t))...
+;          ...(fun (node-right t))..]))

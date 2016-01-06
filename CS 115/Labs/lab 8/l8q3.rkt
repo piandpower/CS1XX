@@ -1,0 +1,12 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname l8q3) (read-case-sensitive #t) (teachpacks ((lib "potatohead.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "potatohead.rkt" "installed-teachpacks")))))
+
+
+;; Lab 8, Question 3
+
+(define (exponent x n)
+  (cond [(= n 0) 1]
+        [else (* x (exponent x (sub1 n)))]))
+  
+(check-expect (exponent 2 5) 32)

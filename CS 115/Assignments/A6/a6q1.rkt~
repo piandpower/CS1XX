@@ -1,0 +1,29 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a6q1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+
+;; is-leap-year?: nat -> boolean
+;; produces true if yr is a leap year, and false otherwise.
+;; note that a yr is a leap year if it is divisible by 4, 
+;; unless it is divisible by 100 but not 400. Zero is not 
+;; a leap year.
+;; example: (is-leap-year 1900) => false 
+;; (is-leap-year 2000) => true, (is-leap-year 2012) => true
+(define (is-leap-year? yr)
+  (cond
+    [(zero? yr) false]
+    [(is-multiple? yr century-leap) true]
+    [(is-multiple? yr century-non-leap) false]
+    [(is-multiple? yr general-leap) true]
+    [else false]))
+(check-expect (is-leap-year? 0) false)
+(check-expect (is-leap-year? 1900) false)
+(check-expect (is-leap-year? 2000) true)
+(check-expect (is-leap-year? 2012) true)
+(check-expect (is-leap-year? 2010) false)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Question 1
+(define (cumulative-interest start-yr retire-yr)
+  ...)

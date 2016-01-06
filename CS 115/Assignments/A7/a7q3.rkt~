@@ -1,0 +1,46 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a7q3) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt" "installed-teachpacks")))))
+
+
+
+(define-struct node (key val left right))
+;; A binary search tree (bst) is empty, or a structure
+;; (make-node k v l r), where k is a number (for the key), 
+;; v is a string (for the associated value), and l,r are bst.
+;; In addition, every key in l is less than k, and every key 
+;; in r is greater than k.
+
+;; An association list (al) is empty, or (cons (list k v) alst), 
+;; where k is a number (for the key), v is a string (for the 
+;; associated value), and alst is an al.
+
+;; Question 3
+(define (dictionary=? tree alst)
+  ...)
+
+;(define (fun t)
+;  (cond
+;    [(empty? t) ...]
+;    [else ...(node-key t)..
+;          ...(node-val t)..
+;          ...(fun (node-left t))...
+;          ...(fun (node-right t))..]))
+
+(define (in-list? tree lst)
+  (cond ;[(empty? lst) false]
+    [(and (equal? (first lst) (node-key tree))
+          (equal? (second lst) (node-val tree))) true]
+    [(> (first lst) (node-key tree)) (in-list? (node-right tree) lst)]
+    [(< (first lst) (node-key tree)) (in-list? (node-left tree) lst)]))
+
+(define (all-list? tree alst)
+  (cond 
+    [(empty? (rest alst)) (in-list? tree (first alst))]
+    [(in-list? tree (first alst)) 
+     (all-list? tree (rest alst))]
+    [else false]))
+(all-list? (make-node 3434 "joe" 
+                      (make-node 1111 "tom" empty empty)
+                      (make-node 5454 "jane" empty empty)) 
+           (list (list 1111 "tom") (list 5454 "jane") (list 3434 "joe")))

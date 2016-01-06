@@ -1,0 +1,17 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname |lab 9 notes|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+
+
+;;Lockstep
+(define (dot-product v1 v2)
+(cond [(empty? v1) 0]
+      [else (+ (* (first v1)
+                  (first v2))
+               (dot-product (rest v1) (restv2)))]))
+
+;;list along for ride
+(define (matri-times-vector matrix vector)
+  (cond [(empty? matrix) empty]
+        (else (cons (dotproduct (first matrix) vector)
+                    (matrix-times-vector (rest matrix) vector)))))

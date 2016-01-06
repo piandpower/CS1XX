@@ -1,0 +1,29 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname |working a8q4|) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt" "installed-teachpacks")))))
+
+
+
+;; Question 4
+(define (num-0-results ex) 
+  ... )
+
+(define (my-aexp-fun ex)
+  (cond 
+    [(number? ex)...]
+    [(ae? ex) ...(ae-fun ex)...
+              ...(my-aexplist-fun (ae-args ex))...]))
+
+(define (my-aexplist-fun exlist)
+  (cond
+    [(empty? exlist)...]
+    [(cons? exlist)...(my-aexp-fun (first exlist))...
+                   ...(my-explist-fun (rest exlist))...]))
+
+(define (my-eval ex)
+  (cond
+    [(number? ex) ex]
+    [else
+     (apply (ae-fn ex) (ae-args ex))]))
+
+(

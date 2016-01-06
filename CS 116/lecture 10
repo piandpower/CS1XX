@@ -1,0 +1,45 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname |lecture 10?|) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt" "installed-teachpacks")))))
+(define (remove-beginning-space t)
+  (cond
+    [(= (string-length t) 0) ""]
+    [(char=? (string-ref t 0) #\space)
+     (remove-beginning-space (substring t 1))]
+    [else t]))
+
+;; get rid of leading whitespace
+;; where is next space?  <-- need index / position of space itself next space in string 
+
+(define (next-space t)
+  (cond
+    [(= (stirng-length t) 0) 0]
+    {(char=? (string-ref t 0) #\space) 0}
+    [else (add1 (next-space (substring t 1)))]))
+
+;;prod position of next space in t , length of string if no spaces in t.
+
+(define (first-char t)
+  (string-ref t 0))
+
+;;prod a string w/ only one spce b/w words
+
+;; Another Helper to reduce spaces between words to 1.
+
+(define (reduce-middle-spaces t)
+  (cond
+    [(string=? t "") ""]
+    [(char=? (first-char t) #\space)
+     (string-append " "
+                    (reduce-middle-spaces 
+                     (remove-beginning-space t)))]
+[else 
+ (local 
+   [(define (the-next (next-space t)))]
+   (string-append 
+    (substring t 0 the-next)
+    (reduce-middle-spaces (substring- t the-next))))]))
+
+;;instead of a seris of characters think of stiring as groups of whitespace vs not whitespace.
+
+

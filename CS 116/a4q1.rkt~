@@ -1,0 +1,32 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname a4q1) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt" "installed-teachpacks")))))
+
+
+;; Question 1:
+
+;; n rows  m columns
+
+
+(define (make-grid alon)
+  (local
+    [(define (div-list numbers n)
+       (cond
+         [(empty? numbers) (list (list (first numbers)))]
+         [else
+          (
+     
+     
+     ;; # lists = n = sqrt( length alon)
+     
+     ;; div into lists of length n
+     
+     ;; div-list fn
+     
+     ;; append together
+           
+           
+           ;;possibly go thru and asign a posn number to each number in alon
+           
+           ;;create a list of my position numbers and split based on list positioning
+  ...)

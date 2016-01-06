@@ -1,0 +1,54 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a7interface) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+
+
+;; NOTE: Question 2 requires the use of the taxon teachpack. Do not include the structure
+;; definitions for taxon or any of the sample data from the teachpack in your solution 
+;; to that question. 
+
+
+
+(define-struct node (key val left right))
+;; A binary search tree (bst) is empty, or a structure
+;; (make-node k v l r), where k is a number (for the key), 
+;; v is a string (for the associated value), and l,r are bst.
+;; In addition, every key in l is less than k, and every key 
+;; in r is greater than k.
+
+;; An association list (al) is empty, or (cons (list k v) alst), 
+;; where k is a number (for the key), v is a string (for the 
+;; associated value), and alst is an al.
+
+(define-struct movie-info (name director duration type))
+;; A movie-info is a structure (make-movie-info n d du t), where 
+;; n is a string (for the name of the movie, d is a string for
+;; director of the movie, du is a nat for the length of the 
+;; movie (in minutes), and t is a symbol of the type (or 
+;; genre) of the movie (e.g. 'drama, 'comedy, etc.)
+
+(define-struct movie-rating-node (rating movies left right))
+;; A movie-bst is empty, or 
+;; (make-movie-rating-node r m lft rgt), where r is 
+;; a number between 0 and 10 (the rating level of a movie), 
+;; m is a (listof movie-info) for the list of movies with 
+;; rating r, and lft and rgt are of type movie-bst. The 
+;; ratings in lft are all less than r, and the ratings in rgt 
+;; are all greater than r. 
+
+
+;; Question 1
+(define (factor-power2 expr)
+  ...)
+
+;; Question 2
+(define (most-populous-parent evol-tree)
+  ...)
+
+;; Question 3
+(define (dictionary=? tree alst)
+  ...)
+
+;; Question 4
+(define (good-movies imdb target)
+  ...)

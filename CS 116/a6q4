@@ -1,0 +1,54 @@
+#
+# Question 4
+#
+
+## float int float bool float -> int[non-negative]
+## 
+##
+def taxes(income, age, rent, student, tuition):
+    student_tax= 0.05
+    youngadult_tax= 0.1
+    mid_aged_tax=0.5
+    retirement_tax= 0.025
+    adult_student_tax= 0.25
+    if student == True and income >= 250000:
+        return taxes(income, age, 0, False, 0)
+    elif age< 18:
+        return after_tax_income(student_tax, income, age, rent, student, tuition)
+    elif age > 18 and age <= 29:
+        return after_tax_income(youngadult_tax, income, age, rent, student, tuition)
+    elif age > 35 and age < 55 and student == True:
+        return after_tax_income(adult_student_tax_rate, income, age, rent, student, tuition)
+    elif age < 64:
+        return after_tax_income(mid_aged_tax,income, age, rent, student, tuition)
+    else:
+        return after_tax_income(retirement_tax,income, age, rent, student, tuition)
+   
+## after_tax_income: float float int float bool float-> int
+##
+##
+##
+def after_tax_income(rate, i, a, r, s, t):
+    deduction=0
+    if s==True:
+        if a< 18 or a > 64:
+            deduction= t
+        elif a <= 29:
+            deduction= (t * 0.75)
+        elif a <= 64:
+            deduction= (t * 0.5)
+    if a < 25:
+        deduction= deduction + r
+    elif a > 25:
+        deduction= deduction + (r * 0.5)
+    taxable_income= max(0, (i - deduction))
+    return int(taxable_income * rate)
+    print int(taxable_income * rate)
+
+print taxes( 25000.00, 19, 3000.00, True, 20000.00)
+print taxes( 25000.00, 17, 3000.00, True, 20000.00)
+print taxes( 45000.50, 23, 10000.00, False, 0.00)
+print taxes( 15000.00, 77, 10000.00, True, 19000.00)
+print taxes(400000.00, 55, 25000.00, True, 100000.00)
+
+

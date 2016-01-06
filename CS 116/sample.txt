@@ -1,0 +1,5 @@
+Ellen 
+h 5 Jade 
+t 8 Sword 
+t 8 Pagoda 
+h King Star

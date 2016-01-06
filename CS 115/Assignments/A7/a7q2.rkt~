@@ -1,0 +1,43 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a7q2) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt" "installed-teachpacks")))))
+
+
+
+
+;(define (fun t)
+  ;(cond [(t-modern? t) ....]
+        ;......(t-modern-name t)....
+        ;......(t-modern-pop t).....
+        ;[t-ancient? t....
+        ;......(t-ancient-name t)....
+        ;......(t-ancient-age t).....
+       ; ....(fun (t-ancient-left t))...
+      ;  ....(fun (t-ancient-right t))...]))
+
+;; Question 2
+(define (most-populous-parent evol-tree)
+  ...)
+
+(define (fun t)
+  (cond [(t-modern? t) false]
+        ......(t-modern-name t)....
+        ......(t-modern-pop t).....
+        [(t-ancient? t)
+        ......(t-ancient-name t)....
+        ......(t-ancient-age t).....
+        ....(fun (t-ancient-left t))...
+        ....(fun (t-ancient-right t))...]))
+
+(define (most-populous-parent evol-tree)
+  (cond [(t-modern? evol-tree) false]
+        [(t-ancient? evol-tree) 
+         (num-kids (t-ancient-left evol-tree))
+         (num-kids-t-ancient-right evol-tree)]
+  ...)
+
+(define (most-kids tanc)
+  (cond [(t-modern? tanc) false]
+        [(t-ancient? t)
+         (cond  [(t-modern? (t-ancient-right tanc))
+         (num-kids (t-ancient-right tanc))]))

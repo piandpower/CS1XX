@@ -1,0 +1,15 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname a2q3) (read-case-sensitive #t) (teachpacks ((lib "potatohead.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "potatohead.rkt" "installed-teachpacks")))))
+;;************************************************
+;; CS 115 Assignment 2, Question 3
+;;
+;; Christopher Alert
+;;
+;;(Creating a userid from a person's information )
+;;
+;;************************************************
+
+;; Question 3
+(define (yahtzee-subtotal ones twos threes fours fives sixes)
+  ...)

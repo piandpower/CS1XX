@@ -1,0 +1,15 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a6q3) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+
+
+
+
+;; Question 3
+(define (match-play lscore1 lscore2)
+  ...)
+
+Write a function called match-play that consumes a scorecard structure representing the scores of one player, a scorecard structure representing the scores of the other player, computes the outcome of the match, and produces the name of the winner, or produces "Tie" if the match is a tie. Note that the scores fields in the two given scorecard structures have the same length and reflect the performances of the players when they play together for the same number of holes in the same order. The number of holes they play could be any number between 1 and 36. You MUST use structure recursion to solve this problem.
+For example,
+(define m (make-scorecard "Michael" (list 3 5 2 2 5))) (define j (make-scorecard "J.P." (list 3 3 3 2 4))) (define l (make-scorecard "Lori" (list 3 5 3 2 4))) (match-play m j) => "J.P.",
+(match-play j m) => "J.P.", (match-play m l) => "Tie".

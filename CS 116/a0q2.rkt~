@@ -1,0 +1,16 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname a0q2) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+;;****************************************************************************
+;;
+;; CS 115 Assignment 0 , Question 2
+;; Christopher Alert
+;;
+;; (Defining lower and upper bounds for typical first-year CS midterm averages)
+;;
+;;*****************************************************************************
+
+(define lower-bound 65)
+
+(define upper-bound 75)
+

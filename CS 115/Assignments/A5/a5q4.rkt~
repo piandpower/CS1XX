@@ -1,0 +1,24 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname a5q4) (read-case-sensitive #t) (teachpacks ((lib "potatohead.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "potatohead.rkt" "installed-teachpacks")))))
+
+
+
+
+
+
+(define-struct contact (name email-address))
+;; A contact is a structure (make-contact n e) where
+;; 	n is a nonâ€empty string representing a person's name and
+;; 	e is a nonâ€empty string representing a person's email address.
+
+(define-struct email (from to subject message))
+;; An email is a structure (make-email f t s m) where
+;; 	f is a contact representing who sent the email,
+;; 	t is a contact representing who received the email,
+;; 	s is a string representing the subject of the email, and
+;; 	m is a nonâ€empty string representing the text of the message.
+
+;; Question 4
+(define (make-address-book user-email-address aloe)
+  ...)

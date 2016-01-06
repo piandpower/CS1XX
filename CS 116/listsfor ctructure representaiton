@@ -1,0 +1,14 @@
+#posn using a list
+
+#use list of length 
+# 2
+
+# [x-val    ,   y-val]
+
+#position 0, position 1
+
+## a posn is a list[x,y] where each of x and y are of type (union float int)
+## make_posn: (union float int) (union float int)-> posn
+
+def make_posn (x_coord,y_coord):
+    return([x_coord,y_coord])

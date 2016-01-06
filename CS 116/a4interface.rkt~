@@ -1,0 +1,19 @@
+;; Question 1:
+(define (make-grid alon)
+  ...)
+
+;; Question 2: 
+(define (rle-encode dna)
+  ...)
+
+;; Question 3:
+(define (rle-decode rle)
+  ...)
+
+;; Question 4:
+(define (silly-string? s)
+  ...)
+
+;; Question 5
+(define (num-comps alon)
+  ...)

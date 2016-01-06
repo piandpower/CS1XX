@@ -1,0 +1,55 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a6helpers) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+;;compounded-P: num num-> num
+;;Consumes P which represents the principal sum on the account
+;;on which interest is compounded and years, which is the
+;;remaining number of years that the closing balance will be 
+;;evaluated for and produces the balance on the account after
+;;withdrawals for the year.
+;;Examples: 
+;;(compounded-P P 0)=> 1000000
+;;(compounded-P P 2)=> 958400
+;;(compounded-P P 21)=> -8458.43
+;(define (compounded-P P years)
+;  (cond [(zero? years) P]
+;        [else (compounded-P (- (+ P (* r P)) W) (sub1 years))]))
+;;Tests:
+;(check-expect (compounded-P P 0) 1000000)
+;(check-expect (compounded-P P 2) 958400)
+;(check-within (compounded-P P 20) .0001 84760.7140)
+
+
+;;DEFINED cONSTANTS
+(define leapyrsum 1000)
+(define savings-rate 1.05)
+(define evenyrsum 100)
+(define chequeacctrate 1.02)
+
+(define (sav-balance bal start-yr retire-yr)
+  (cond [(= retire-yr start-yr) (* leapyrsum savingsrate)]
+        [else (sav-balance (+ leapyrsum (* savingsrate leapyrsum)) (add1 start-yr) retire-yr)]))
+
+
+;;savings balance that adds 1000 every leap year and compounds interest on the balance every year
+;;chequing a/c balance fn that adds 100 every even year not leap and compounds interest every year
+;;function to keep them compounding every year even if odd and no money paid in or anything
+;; get the yearsly copounded interest first
+;;we only want the amount of interest
+
+
+(define (evenyr bal start-yr)
+  (* (+ evenyrsum bal) chequeacctrate)
+  
+  
+  
+  (define (leapyr bal start-yr)
+    (+ (* (+ leapyrsum bal) savings-rate) bal))
+  
+  ;;arrival: (listof flight)-> (listof w-lof)
+  (define (arrival-times w-lof)
+    (cond [(empty? w-lof) empty]
+          [else (cons (make-clock 0 (+ (clock-mins(min-clock (flight-departure (first w-lof))))
+                                       (flight-duration (first w-lof))))(arrival-times (rest w-lof)))]))
+  
+  

@@ -1,0 +1,27 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname a2q5) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt" "installed-teachpacks")))))
+;;
+;;********************************************************;;
+;; CS 116 Assignment 2, Question 5                        ;;
+;; Christopher Alert                                      ;;
+;;                                                        ;;
+;;(Determining the score of a column of cards all of the  ;;
+;; same colour in Lost Cities)                            ;;
+;;                                                        ;;
+;;********************************************************;;
+;;
+
+
+
+
+
+Complete the function select-min which consumes a function f and three lists A,B,C, all of the same length and containing the same type of values. The function f consumes a single value of the same type as the list elements, and produces a number. Consider the values a,b,c, where a is from A, b is from B, c is from C, all located at the same location in their respective lists. The list produced by select- min will include
+•	aif(f a)is less or equal to both(f b)and(f c), •	bif(f b)is less than(f a)and less or equal to(f c), • cotherwise,
+for each such triple.
+For example,
+(select-min string-length (list "hi" "there" "friend" "a-z")
+(list "two"	"times"	"three"
+(list "about" "nothing" "" => (list "hi"	"there"	""
+"123") "!!!")) "a-z")
+For this question, you may use structural recursion (though it can be completed using abstract list functions).

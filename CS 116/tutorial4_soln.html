@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>CS 116 Tutorial 4 (Solutions): Functional abstraction and generative recursion</title>
+
+        
+<link rel="stylesheet" type="text/css" href="/~cs116/style.css" />
+<link rel="stylesheet" type="text/css" href="/~cs116/print.css" media="print" />
+
+<!-- If this is IE, run javascript code to fix its behaviour -->
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js"
+        type="text/javascript"></script>
+<![endif]-->
+
+<!-- Function to insert email address invisible to crawlers -->
+<script type="text/javascript">
+   /* <![CDATA[ */
+function insertMailto( $emailuser, $emailhost ) {
+   document.write('<a href=\"mailto:' + $emailuser + ' at ' + $emailhost 
+                  + '\">' + $emailuser + ' at ' + $emailhost + '</a>');
+   /* ]]> */
+}
+</script>
+
+
+</head>
+<body>
+<h1>CS 116: Introduction to Computer Science 2</h1>
+
+<!-- This probably shouldn't be done as a table -->
+<table id="main">
+   <tr>
+      <td id="nav-box">
+         	  <ul id="nav-bar">
+        <li><a href="/~cs116">Announcements&nbsp;/&nbsp;Home</a></li>
+        <li><a href="/~cs116/personnel">Personnel</a>
+        	<ul>
+        		<li><a href="/~cs116/officehours">Office Hours</a></li>
+        		<li><a href="/~cs116/needhelp">Need Help?</a></li>
+        	</ul>
+        </li>
+        <li> <a href="/~cs116/assignments">Assignments</a> 
+        	<ul>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/publictest.php">Public Test System</a></li>
+        		<li><a href="/~cs116/postmortem">Postmortems</a></li>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/protect">Assignment Solutions</a></li>
+        	</ul>
+        </li>
+        
+        <li><a href="/~cs116/Instructor-Specific-page">Instructor Specific Pages</a></li>
+        <li><a href="/~cs116/timetable">Timetable</a></li>
+        <li><a href="/~cs116/exams">Exams</a></li>
+        <li><a href="/~cs116/grading">Grading</a></li>
+        <li><a href="/~cs116/resources">Resources&nbsp;&amp;&nbsp;Links</a></li>
+        <li><a href="/~cs116/handouts">Handouts</a>
+        	<ul> 
+        	<li> <a href="/~cs116/errata">Errata </a> </li>
+        	</ul>
+        </li>
+        <li><a href="/~cs116/styleGuide">Programming&nbsp;Style</a></li>
+        <li><a href="/~cs116/tutorials">Tutorials</a></li>
+		<!-- <li><a href="/~cs116/W09">Winter 2009</a></li> -->
+      </ul>
+
+      </td>
+      <td id="main-box">
+
+
+<h2 class="title">Tutorial 4 (Solutions): Functional abstraction and generative recursion (Oct 6 &amp; 8, 2010)</h2>
+<br />
+<ol>
+<li> <p>Consider the following observation about a <i>sorted list</i>: If a list is sorted in
+increasing order, then if I look at any pair of consecutive members of that list, the first
+one is smaller than the second one. </p>
+
+<p>Use that observation to write a function <code>is-sorted?</code> which consumes a
+list and determines if the list is sorted in increasing order or not
+(the return should be <code>true</code> or <code>false</code>).  Lists with zero or one entries
+are both considered sorted. What is the runtime of <code>is-sorted?</code></p>
+
+<p>Note: this program is sort-of part way between being a very
+straightforward structural recursion and a slightly more complicated
+algorithm.  So give it a chance! </p>
+
+<blockquote><pre>;; is-sorted?: (listof num) -> bool
+;; determines if lst is sorted.
+;; examples:
+;; (is-sorted? empty) => true
+;; (is-sorted? (list 1)) => true
+;; (is-sorted? (list 2 1)) => false
+;; (is-sorted? (list 1 2 2 3)) => true
+
+(define (is-sorted? lst)
+  (cond [(empty? lst) true]  ;; lists of length zero
+        [(empty? (rest lst)) true]  ;; lists of length one
+        [(> (first lst) (second lst)) false]  ;; first two elements unsorted
+        [else (is-sorted? (rest lst))]))  ;; first two elements sorted
+        
+(check-expect (is-sorted? empty)  true)
+(check-expect (is-sorted? (list 1)) true)
+(check-expect (is-sorted? (list 1 2)) true)
+(check-expect (is-sorted? (list 2 1))  false)
+(check-expect (is-sorted? (list 1 2 2 3 4 4)) true)</pre></blockquote>
+
+<p>Note that <code>is-sorted</code> contains three base cases: if the list has length zero,
+	if the list has length one, or if the first two elements are unsorted. All
+	three base cases should be checked in the tests.</p>
+
+<p><code>is-sorted</code> is a linear function: it looks at each member of the list
+(in the worst case) up to twice.</p></li>
+
+
+<li>Consider the <i>quick-sort</i> algorithm. It has three parts:
+<ol>
+<li>Find a pivot.</li>
+<li>Divide the list into three parts: the part of the list whose value
+is less than the pivot, the pivot, and the part of the list whose
+value is greater than the pivot.</li>
+<li>Sort the first and third parts, and put the list together.</li>
+</ol>
+<p>Write a general-purpose quick-sort function where the first step is a
+separate function and consider the following:</p>
+<ul>
+<li>What is the proper contract of a pivot-finding function?</li>
+<li>What is the contract of the quick-sort function?</li>
+<li>Does the pivot have to be in the list? </li>
+</ul>
+<blockquote><pre>;; quick-sort2: (listof num) ((listof num)[nonempty] -> num) -> (listof num)
+;; Sorts lst, using the function pivot to find a pivot point in the list.
+;; Examples:
+;; (quick-sort2 empty first) => empty
+;; (quick-sort2 (list 1) first) => (list 1)
+;; (quick-sort2 (list 3 4 1 6) first) => (list 1 3 4 6)
+
+(define (quick-sort2 lst pivot)
+  (cond [(empty? lst) empty]
+        [else (local ((define p (pivot lst)))
+                (append
+                 (quick-sort2 (filter (lambda (x) (&lt; x p)) lst) pivot)
+                 (filter (lambda (x) (= x p)) lst)
+                 (quick-sort2 (filter (lambda (x) (> x p)) lst) pivot)))]))
+
+(check-expect (quick-sort2 empty first) empty)
+(check-expect (quick-sort2 (list 1) first) (list 1))
+(check-expect (quick-sort2 (list 3 4 1 6) length) (list 1 3 4 6))</pre></blockquote>
+
+<p> The goal of a pivot function is to be efficient, and give a value close to the middle of
+the list, because quick-sort works fastest if the list is divided in half at every recursive call.
+Good pivot functions strike a balance between these two goals; we used <code>first</code>, which is
+very efficient and on a list in random order will give a reasonable approximation of the mid-point
+of a list.</p>
+
+<p>A function which finds the maximum and minimum values in a list and chooses a pivot midway
+between those values would do a very good job of splitting the list in half, but is so inefficient
+that it would not make a good pivot function. On the other hand, finding the average of the first
+few elements (say the first three) would strike a nice balance between efficiency and
+effectiveness.</p>
+
+<blockquote><pre>;; average-of-three-pivot: (listof num)[nonempty] -> num
+;; returns the mean of the first three numbers in a list, 
+;; if it's that long, or the first element of the list, if it's not.
+(define (average-of-three-pivot lst)
+  (cond [(empty? (rest lst)) (first lst)]
+  	[(empty? (rest (rest lst))) (first lst)]
+	[else (/ (+ (first lst) (second lst) (third lst)) 3)]))</pre></blockquote>
+
+<p> Note that our function has base cases to handle lists of one or two elements; these are
+necessary since quick-sort calls for any nonempty list, not just a list of 3 or more elements.</p>
+</li>
+
+<li><p>Write a function <code>retrieve-by-position</code> which consumes a list of lists called
+<code>lsts</code> and a natural number <code>n</code> and produces the nth value in <code>lsts</code>
+(counting each value in each list), or <code>'error</code> if there isn't an nth value in
+the list of lists.</p>
+
+<p>For example, <code>(retrieve-by-position (list (list 0 'b) empty (list 2) (list 3
+4 "e")) 3) => 3</code>, and <code>(retrieve-by-position (list (list 0 'b) empty (list 2)
+(list 3 4 "e")) 8) => 'error</code>.</p>
+
+<p>Note that the lists which are elements of <code>lsts</code> can be empty, but will not
+have other lists nested inside them. Start counting positions from 0, and only pass through each
+element of the list once.</p>
+
+<blockquote><pre>;; retrieve-by-position: (listof (listof X)) nat -> (union X symbol)
+;; consumes a list of lists of values (which each component list can be empty
+;; or a non-nested list) and a natural number n, and produces the nth number
+;; which occurs in the list. Start counting list positions from 0.
+;; If there are not n numbers in the list, the symbol 'error is returned
+;; examples:
+;; (retrieve-by-position (list (list 0 1) empty (list 2) (list 3 4 5)) 3) => 3
+;; (retrieve-by-position (list (list 0 1) empty (list 2) (list 3 4 5)) 8) => 'error
+
+(define (retrieve-by-position lsts n)
+  (cond
+    [(empty? lsts) 'error]
+    [(empty? (first lsts)) (retrieve-by-position (rest lsts) n)]
+    [(= 0 n) (first (first lsts))]
+    [else (retrieve-by-position (cons (rest (first lsts))
+                            (rest lsts))
+                      (sub1 n))]))
+                      
+(check-expect (retrieve-by-position empty 10) 'error)
+(check-expect (retrieve-by-position (list (list 0)) 0) 0)
+(check-expect (retrieve-by-position (list (list 0 1)) 0) 0)
+(check-expect (retrieve-by-position (list (list 0 1)) 1) 1)
+(check-expect (retrieve-by-position (list (list 0 1)) 2) 'error)
+(check-expect (retrieve-by-position (list empty (list 0 1 2)) 1) 1)
+(check-expect (retrieve-by-position (list empty (list 0 1 2)) 3) 'error)
+(check-expect
+  (retrieve-by-position (list (list 0 1 2) (list 3 4) empty (list 5 6 7) (list 8)) 0) 0)
+(check-expect
+  (retrieve-by-position (list (list 0 1 2) (list 3 4) empty (list 5 6 7) (list 8)) 4) 4)
+(check-expect
+  (retrieve-by-position (list (list 0 1 2) (list 3 4) empty (list 5 6 7) (list 8)) 5) 5)
+(check-expect
+  (retrieve-by-position (list (list 0 1 2) (list 3 4) empty (list 5 6 7) (list 8)) 8) 8)
+(check-expect
+  (retrieve-by-position (list (list 0 1 2) (list 3 4) empty (list 5 6 7) (list 8)) 9) 'error)</pre>
+</blockquote></li>
+
+</ol>
+</td>
+</tr>
+</table>
+
+<div class="validator">
+<!-- If this is IE, display this link -->
+<!--[if lt IE 8]>
+<a href="http://code.google.com/p/ie7-js/">
+   <img style="border:0;width:88px"
+   src="http://ie7-js.googlecode.com/svn/version/ie7.gif"
+   alt="IE7 library used" />
+</a>
+<![endif]-->
+<a href="http://validator.w3.org/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://www.w3.org/Icons/valid-xhtml10-blue"
+   alt="Valid XHTML 1.0 Strict" />
+</a>
+<a href="http://jigsaw.w3.org/css-validator/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+   alt="Valid CSS!" />
+</a>
+</div>
+
+<p class="lastModified">
+Last modified on 
+  
+  Friday, 01 October 2010, at 14:20 hours.
+</p>
+
+
+</body>
+</html>

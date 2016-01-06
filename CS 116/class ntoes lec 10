@@ -1,0 +1,37 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname |class ntoes lec 10?|) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt" "installed-teachpacks")))))
+(define (selection-sort lst)
+  (cond
+    [(empty? lst) empty]
+    [else (local
+            [(define smallest
+               (foldr min (first lst) lst))       
+             ;;removed is all the entreis other than the smallesr
+             (define removed
+               (filter (lambda (x)
+                         (not (= x smallest))) lst))]
+            ;;put smallest at the front of the list (o=sorteD)
+            
+            (cons smallest
+                  (selection-sort removed)))]))
+(selection-sort '(1 3 5 123 5 2))
+
+;Selection-Sort-Run-time - list of (length n)
+;1. find minimum in list approx n steps
+;find veerything oter than the smallest pprox n steps == 2n steps
+
+;;now we repeat for list of length n-1 ... 2(n-1) steps 
+
+;; Now, '   '    '   '    '   '    n-2 .... 2(n-2) steps 
+;............
+;..
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  O (n^2)
+
+
+;; divide and conquer.
+
+;; threshold thr < -- need to come upwith theshold viz function 
+;; and then filter above thr and below thr and thens sort individually.
+
+;; course notes quick sort. !!

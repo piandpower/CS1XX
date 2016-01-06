@@ -1,0 +1,32 @@
+#
+# Question 3
+#
+
+import math
+import a6
+
+f12= a6.fib(12)
+
+## fib: int[<= 4/ 72] -> int
+##
+##
+def fib(n):
+    gold_ratio= (1 + math.sqrt(5))/ 2
+    numerator=(math.pow(gold_ratio , n) - math.pow((1 - gold_ratio) , n))
+    denom= math.sqrt(5)
+    return int(numerator/denom)
+    print numerator/denom
+
+def find_accuracy_limit(n):
+    if not (a6.fib(n) == fib(n) ):
+        return n
+        print n
+    else:
+        return find_accuracy_limit(n+1)
+        print(n+1)
+        
+print find_accuracy_limit(0)
+
+    
+
+

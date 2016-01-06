@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>CS 116 Tutorial 6 (Solutions): Introduction to Python</title>
+
+        
+<link rel="stylesheet" type="text/css" href="/~cs116/style.css" />
+<link rel="stylesheet" type="text/css" href="/~cs116/print.css" media="print" />
+
+<!-- If this is IE, run javascript code to fix its behaviour -->
+<!--[if lt IE 8]>
+<script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js"
+        type="text/javascript"></script>
+<![endif]-->
+
+<!-- Function to insert email address invisible to crawlers -->
+<script type="text/javascript">
+   /* <![CDATA[ */
+function insertMailto( $emailuser, $emailhost ) {
+   document.write('<a href=\"mailto:' + $emailuser + ' at ' + $emailhost 
+                  + '\">' + $emailuser + ' at ' + $emailhost + '</a>');
+   /* ]]> */
+}
+</script>
+
+
+</head>
+<body>
+<h1>CS 116: Introduction to Computer Science 2</h1>
+
+<!-- This probably shouldn't be done as a table -->
+<table id="main">
+   <tr>
+      <td id="nav-box">
+         	  <ul id="nav-bar">
+        <li><a href="/~cs116">Announcements&nbsp;/&nbsp;Home</a></li>
+        <li><a href="/~cs116/personnel">Personnel</a>
+        	<ul>
+        		<li><a href="/~cs116/officehours">Office Hours</a></li>
+        		<li><a href="/~cs116/needhelp">Need Help?</a></li>
+        	</ul>
+        </li>
+        <li> <a href="/~cs116/assignments">Assignments</a> 
+        	<ul>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/publictest.php">Public Test System</a></li>
+        		<li><a href="/~cs116/postmortem">Postmortems</a></li>
+        		<li><a href="https://www.student.cs.uwaterloo.ca/~cs116/protect">Assignment Solutions</a></li>
+        	</ul>
+        </li>
+        
+        <li><a href="/~cs116/Instructor-Specific-page">Instructor Specific Pages</a></li>
+        <li><a href="/~cs116/timetable">Timetable</a></li>
+        <li><a href="/~cs116/exams">Exams</a></li>
+        <li><a href="/~cs116/grading">Grading</a></li>
+        <li><a href="/~cs116/resources">Resources&nbsp;&amp;&nbsp;Links</a></li>
+        <li><a href="/~cs116/handouts">Handouts</a>
+        	<ul> 
+        	<li> <a href="/~cs116/errata">Errata </a> </li>
+        	</ul>
+        </li>
+        <li><a href="/~cs116/styleGuide">Programming&nbsp;Style</a></li>
+        <li><a href="/~cs116/tutorials">Tutorials</a></li>
+		<!-- <li><a href="/~cs116/W09">Winter 2009</a></li> -->
+      </ul>
+
+      </td>
+      <td id="main-box">
+
+
+<h2 class="title">Tutorial 6 (Solutions): Introduction to Python (Oct 20 &amp; 22, 2010)</h2>
+<br />
+
+<ol>
+<li>Credit card account numbers often have some security measures 
+encoded within them. For example, the last digit might be a "check 
+digit", which could possibly be obtained by adding the other digits 
+together and dividing by 7. This check digit allows websites to quickly
+determine whether or not you made a typo when entering your credit card
+number (among other things). Write a Python function 
+<code>create_account_number</code> that consumes a 3-digit account number and 
+produces the corresponding 4-digit number, in which the new last digit 
+is remainder when the sum of the digits of the original number is divided by 7.
+For example, <code>123 => 1236</code> and <code>778 => 7781</code>.
+
+<blockquote><pre>## create_account_number: int[100:999] -> int[1000:9999]
+## produces an expanded account number which starts from acct, and appends
+## one number, the remainder when the sum of the digits is divided by 7
+## examples: create_account_number(123) => 1236
+##           create_account_number(778)=>7781
+
+def create_account_number(acct):
+    ones = acct % 10
+    tens = (acct / 10) % 10
+    hundreds = acct / 100
+    check = (ones + tens + hundreds) % 7
+    new_acct = acct * 10 + check
+    return new_acct
+    
+print "Testing create_account_number"
+print create_account_number(123) == 1236
+print create_account_number(778) == 7781</pre></blockquote><br /></li>
+
+<li><p>Fermat's Last Theorem states that given positive integers a, b, and n,
+there exists no integer c for which a^n + b^n = c^n unless n=2. Although Fermat
+wrote the statement of this theorem in the margin of a book in 1637, it was not
+proven until 1995 (and not for lack of trying - thousands of incorrect proofs of
+the theorem were put forward before it was finally proven). Write a
+function <code>fermat_check</code> that consumes four positive
+integers, a, b, c, and n, with n > 1. Your function will not return a value.</p>
+
+<p>If n = 2, and a^2 + b^2 = c^2, then your function should print
+"Pythagorean triple" to console output, and exit. If n = 2, and
+a^2 + b^2 is not c^2, then your function should print "Not a Pythagorean triple"
+to console output, and exit. If n > 2, and a^n + b^n = c^n, then your function
+should print out "Fermat was wrong!", as you have found a counterexample to
+Fermat's Last Theorem. Otherwise, your function should print out,
+"Not a counterexample", and exit.</p>
+
+<p>[Based on exercise 5.1 of Think Python]</p>
+
+<blockquote><pre># fermat_check: int[>0] int[>0] int[>0] int[>1] -> None
+# If n == 2, checks if (a,b,c) form a Pythagorean triple, and prints
+# out an appropriate message if so.
+# If n > 2, checks if a^n + b^n = c^n (which would be a counterexample
+# to Fermat's Last Theorem), and prints out an appropriate message.
+# Examples:
+# fermat_check(3,4,5,2) will print out "Pythagoren triple".
+# fermat_check(3,4,6,2) will print out "Not a Pythagorean triple".
+# fermat_check(3,4,5,3) will print out "Not a counterexample".
+# Since no known counterexample exists, we don't know anything that
+# will yield "Fermat was wrong".
+
+def fermat_check(a,b,c,n):
+    if n == 2:
+        if a*a + b*b == c*c:
+            print "Pythagorean triple"
+        else:
+            print "Not a Pythagorean triple"
+    else:
+        if a**n + b**n == c**n:
+            print "Fermat was wrong!"
+        else:
+            print "Not a counterexample"
+            
+"All examples were tested; no additional tests required"
+</pre></blockquote><br /></li>
+
+<li>In lectures, you saw a structurally recursive Python version of <code>factorial</code>.
+However, we know that accumulatively defining <code>factorial</code> greatly reduces the
+memory requirements for the function; write the accumulatively recursive version, paying
+close attention to when you need to use <code>return</code>.
+
+<blockquote><pre>## factorial: int[>=0] -> int[>0]
+## Consumes a non-negative integer n and produces n!
+## Examples:
+## factorial(0) => 1
+## factorial(4) => 24
+## factorial(12) => 479 001 600
+
+def factorial(n):
+	def factorial_acc (current_n, prod_so_far):
+		if current_n == 0:
+			return prod_so_far
+		else:
+			return factorial_acc (current_n-1,
+			                      prod_so_far*current_n)
+	return factorial_acc (n, 1)
+
+print "Tests for factorial"
+print "factorial(0)"
+print factorial(0) == 1
+print "factorial(1)"
+print factorial(1) == 1
+print "factorial(5)"
+print factorial(5) == 120
+print "factorial(12)"
+print factorial(12)_=> 479 001 600</pre></blockquote><br /></li>
+
+<li>Write a function <code>print_digits</code> that consumes a positive integer and
+produces returns nothing; instead, it prints out the digits of that
+number out from the last digit to the first digit, one digit per line.
+For example, if the user types in 320, then the function prints out:
+<pre>0
+2
+3</pre>
+Don't use string functions, but instead use generative recursion on
+numbers.  Do you need an explicit base case?
+    
+<blockquote><pre># print_digits: num[>0] -> None
+# prints out the digits of n, from least significant to most
+# significant.
+# Example:
+# print_digits_int(320) prints out:
+# 0
+# 2
+# 3
+
+def print_digits (n):
+    if n > 0:
+        print n % 10
+        print_digits (n / 10)  # note: integer division!!
+
+# Tests (commas indicate new lines):
+# print_digits(1) prints 1
+# print_digits(320) prints 0, 2, 3
+# print_digits(98765) prints 5, 6, 7, 8, 9</pre></blockquote><br /></li>
+
+<li>Write a function closest_integer that has no arguments, but instead
+reads in a floating point number from console input, and returns the
+closest integer to that number.  (Round ties up, so that
+closest_integer (0.5) is 1, while closest_integer (-0.5) is 0.)
+
+<blockquote><pre># closest_integer: None -> int
+# reads in a float from console input, and returns the closest integer
+# to it, rounding ties up.
+# Examples:
+# If the user types in 5.0, closest_integer returns 5
+# If the user types in 0.3, closest_integer returns 0
+# if the user types in 1.5, closest_integer returns 2
+# If the user types in -1.5, closest_integer returns -1
+# if the user types in 1.8, closest_integer returns 2
+# if the user types in -1.8, closest_integer returns -2
+
+def closest_integer():
+    n = float(raw_input ("What's the number? "))
+    base_number = int(n)
+    after_decimal = n - int(n)
+    if after_decimal &lt; -0.5:
+        return base_number-1  # If this line is evaluated, the function stops
+    if after_decimal >= 0.5:
+        return base_number+1
+    return base_number
+
+# In addition to the examples above, the following cases were tested:
+# If the user types in -1.3, closest_integer returns -1
+# If the user types in .5, closest_integer returns 1</pre></blockquote><br /></li>
+
+</ol>
+
+</td>
+</tr>
+</table>
+
+<div class="validator">
+<!-- If this is IE, display this link -->
+<!--[if lt IE 8]>
+<a href="http://code.google.com/p/ie7-js/">
+   <img style="border:0;width:88px"
+   src="http://ie7-js.googlecode.com/svn/version/ie7.gif"
+   alt="IE7 library used" />
+</a>
+<![endif]-->
+<a href="http://validator.w3.org/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://www.w3.org/Icons/valid-xhtml10-blue"
+   alt="Valid XHTML 1.0 Strict" />
+</a>
+<a href="http://jigsaw.w3.org/css-validator/check?uri=referer">
+   <img style="border:0;width:88px;height:31px;"
+   src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+   alt="Valid CSS!" />
+</a>
+</div>
+
+<p class="lastModified">
+Last modified on 
+  
+  Wednesday, 20 October 2010, at 15:01 hours.
+</p>
+
+
+</body>
+</html>

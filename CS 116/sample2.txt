@@ -1,0 +1,9 @@
+Gio 
+h King Jade 
+h 10 Jade 
+h 10 Sword 
+h 10 Pagoda 
+t 5 Star 
+t 6 Star 
+t 7 Star 
+t 7 Sword 
